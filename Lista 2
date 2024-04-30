@@ -226,8 +226,8 @@
 ;; ------------------------------
 ;; objetivo: dado uma lista de formas e um tipo de forma, verifica se há um elemento desse na lista
 ;; exemplos:
-;;           (existe-forma-na-lista? LISTA1 "Triângulo") -> #true
-;;           (existe-forma-na-lista? LISTA1 "Círculo") -> #false
+;;           (existe-forma-na-lista? LISTAFORMA1 "triângulo") -> #true
+;;           (existe-forma-na-lista? LISTAFORMA2 "estrela") -> #false
 
 ;; dada uma lista e uma forma
 (define ( existe-forma-na-lista? lf tf)
