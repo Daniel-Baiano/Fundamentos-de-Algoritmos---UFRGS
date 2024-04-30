@@ -1,0 +1,307 @@
+;#####################################################################################################
+;;
+;; LISTA AVALIADA 2
+;;
+;#####################################################################################################
+;; IDENTIFICAÇÃO DO GRUPO
+;; Escreva abaixo, em ordem alfabética, o nome e número de matrícula de todos os membros do grupo:
+;;    Nome Sobrenome Matrícula
+;; 1.
+;; 2.
+;; 3.
+;; 4.
+;#####################################################################################################
+
+;; ========================================================================================
+;;                              DEFINIÇÕES DE DADOS
+;; ========================================================================================
+;; -----------------
+;; TIPO TipoDeForma:
+;; -----------------
+;; Um TipoDeForma pode ser
+;; 1. "retângulo", ou
+;; 2. "triângulo", ou
+;; 3. "círculo", ou
+;; 4. "estrela"
+
+;; -----------------
+;; TIPO CorDeForma:
+;; -----------------
+;; Uma CorDeForma pode ser
+;; 1. "red", ou
+;; 2. "blue", ou
+;; 3. "green", ou
+;; 4. "yellow", ou
+;; 5. "orange", ou
+;; 6. "brown"
+
+;; -------------------
+;; TIPO ListaDeNumeros:
+;; -------------------
+;; Uma ListaDeNumeros é
+;; 1. empty (lista vazia), ou
+;; 2. (cons n ln), onde n: Número e ln: ListaDeNumeros 
+
+;; -----------
+;; TIPO Forma:
+;; -----------
+(define-struct forma (nome tipo cor args))
+;; Um elemento do conjunto Forma tem o formato
+;;    (make-forma n t c a), onde
+;;    n : String, é o nome da forma
+;;    t : TipoDeForma, é o tipo da forma
+;;    c : CorDeForma, é a cor da forma
+;;    a : ListaDeNumeros, é a lista de argumentos da forma, confore seu tipo:
+;;                        - retângulos possumes 2 argumentos, largura e altura;
+;;                        - triângulos possumes 1 argumento, o lado;
+;;                        - círculos possumes 1 argumento, o raio;
+;;                        - estrelas possumes 3 argumentos, o número de pontas, o
+;;                          raio interno e o raio externo.
+
+(define FORMA1 (make-forma "triângulo-azul" "triângulo" "blue" (cons 10 empty)))
+(define FORMA2 (make-forma "retângulo-laranja" "retângulo" "orange" (cons 20(cons 10 empty))))
+(define FORMA3 (make-forma "círculo-verde" "círculo" "green" (cons 30 empty)))
+(define FORMA4 (make-forma "estrela-vermelha" "estrela" "red" (cons 20(cons 10(cons 5 empty)))))
+(define FORMA5 (make-forma "triângulo-amarelo" "triângulo" "yellow" (cons 10 empty)))
+(define FORMA6 (make-forma "retângulo-azul" "retângulo" "blue" (cons 20(cons 10 empty))))
+(define FORMA7 (make-forma "círculo-vermelho" "círculo" "red" (cons 30 empty)))
+(define FORMA8 (make-forma "estrela-marrom" "estrela" "brown" (cons 20(cons 10(cons 5 empty)))))
+;; -------------------
+;; TIPO ListaDeFormas:
+;; -------------------
+;; Uma ListaDeFormas é
+  ;; 1. vazia (empty), ou
+  ;; 2. (cons f lf), onde
+  ;;     f : Forma
+  ;;     lf: ListaFormas
+
+(define LISTAFORMA1 (cons FORMA1 (cons FORMA2 (cons FORMA3 empty))))
+(define LISTAFORMA2 (cons FORMA4 (cons FORMA6 (cons FORMA7 empty))))
+(define LISTAFORMA3 (cons FORMA8 (cons FORMA5 empty)))
+
+
+;; -----------
+;; TIPO Aluno:
+;; -----------
+
+(define-struct aluno (nome  desenho conceito))
+;; Um elemento do conjunto Aluno tem o formato
+;;    (make-aluno n d c), onde
+;;    n : String, é o nome do aluno
+;;    d : ListaDeFormas, é o desenho do aluno
+;;    c : String, é o conceito do aluno
+
+;; ========================================================================================
+;;                                    FUNÇÕES ÚTEIS 
+;; ========================================================================================
+
+;; ----------------------------------------------
+;; FUNÇÃO length: (funcão pré-definida no Racket)
+;; ----------------------------------------------
+;; length : Lista -> Número
+;; Dada uma lista (de qualquer tipo), devolve o número de elementos da lista
+;; Exemplos:
+;;        (length empty) = 0
+;;        (length (cons 1 (con 3 (cons -10 empty)))) = 3
+
+;; -----------------------
+;; FUNÇÃO desenha-com-nome:
+;; -----------------------
+;; desenha : Forma -> Imagem
+;; Dada uma forma, desenha esta forma com o  seu nome dentro
+;; Exemplos:
+;;     (desenha-com-nome (make-forma "C2" "circulo" "blue"  (cons 30 empty))) = .
+;;     (desenha-com-nome (make-forma "E1" "estrela" "red"     (cons 40 (cons 20 (cons 40 empty))))) = .
+
+ (define (desenha-com-nome @F) ;; Dada uma forma @F
+   (overlay  ;; sobrepõe
+      ;; o nome da forma @F, e
+      (text (forma-nome @F) 20 "black")
+      ;; o desenho da forma @F
+      (cond
+              ;; se @F for um retângulo, desenha este retângulo
+              [(string=? "retângulo" (forma-tipo @F))
+               (rectangle (first (forma-args @F))(second (forma-args @F)) "solid"(forma-cor @F))]
+              ;; se @F for um triângulo, desenha este triângulo
+              [(string=? "triângulo" (forma-tipo @F))
+               (triangle (first (forma-args @F)) "solid" (forma-cor @F))]
+              ;; se @F for um círculo, desenha este circulo
+              [(string=? "círculo" (forma-tipo @F))
+               (circle (first (forma-args @F)) "solid"(forma-cor @F))]
+              ;; se @F for uma estrela, desenha esta estrela
+              [(string=? "estrela" (forma-tipo @F))
+               (radial-star (first (forma-args @F))(second (forma-args @F)) (third (forma-args @F)) "solid" (forma-cor @F))])))
+
+;; ---------------------------
+;; FUNÇÃO desenha-lista-formas:
+;; ---------------------------
+;; desenha-lista-formas: ListaDeFormas -> Imagem
+;; Dada uma lista de formas, desenha as formas da lista lado a lado, com os nomes dentro das formas.
+;; Exemplo:
+;;    (desenha-lista-formas (cons (make-forma "C2" "circulo" "blue"  (cons 30 empty))
+;;                            (cons  (make-forma "E1" "estrela" "red"     (cons 40 (cons 20 (cons 40 empty)))) empty))) = .
+ 
+(define (desenha-lista-formas @LF) ;; Dada uma lista de formas @LF
+  (cond
+    ;; se a lista @LF estiver vazia, devolve a imagem vazia
+    [(empty? @LF) empty-image]
+    ;; senão coloca lado a lado
+                  ;; o desenho do primeiro elemento de @LF, e 
+    [else (beside (desenha-com-nome (first @LF))
+                  ;; o desenho do resto dos elementos da lista @LF
+                  (desenha-lista-formas (rest @LF)))]))
+
+;; -------------------------
+;; FUNÇÃO conta-formas-cor:
+;; -------------------------
+;; conta-formas-cor: ListaDeFormas CorDeForma -> Numero
+;; Dada uma lista de formas e uma cor, diz quantas formas desta cor há na lista.
+;; Exemplos:
+;;    (conta-formas-cor empty "red") = 0
+;;    (conta-formas-cor (cons (make-forma "C2" "circulo" "blue"  (cons 30 empty))
+;;                            (cons  (make-forma "E1" "estrela" "red"     (cons 40 (cons 20 (cons 40 empty)))) empty)) "red"))) =   1
+
+(define (conta-formas-cor @LF @COR)
+  (cond
+    ;; se a lista estiver vazia, devolve zero
+    [(empty? @LF) 0]
+    ;; senão, soma
+    [else  (+
+               ;; 1, se o primeiro elemento da lista @LF for da cor @COR, ou zero, caso contrário
+               (cond
+                    [(string=? (forma-cor (first @LF)) @COR) 1]
+                    [else 0])
+               ;; ao número de formas da cor @COR do resto da lista @LF
+               (conta-formas-cor (rest @LF) @COR))]))
+  
+
+
+;; ========================================================================================
+;;                                 EXERCÍCIOS
+;; ========================================================================================
+
+
+;; ==============================================================
+;; 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+;; ==============================================================
+
+
+;; Constantes do tipo Aluno:
+
+(define ALUNO1 (make-aluno "Pedro" (cons FORMA1 empty) "C"))
+(define ALUNO2 (make-aluno "João" (cons FORMA1 (cons FORMA2 empty)) "A"))
+(define ALUNO3 (make-aluno "Ana" (cons FORMA3 (cons FORMA4 empty)) "A")) 
+(define ALUNO4 (make-aluno "Bianca" (cons FORMA2 (cons FORMA4 empty)) "A"))
+(define ALUNO5 (make-aluno "Julia" (cons FORMA5 (cons FORMA6(cons FORMA7 empty))) "A"))
+
+(define ALUNO6 (make-aluno "Julio" empty "D"))
+(define ALUNO7 (make-aluno "Lucas" (cons FORMA1 (cons FORMA5 empty)) "A"))
+(define ALUNO8 (make-aluno "Maria" (cons FORMA8 (cons FORMA7 empty)) "D")) 
+(define ALUNO9 (make-aluno "Mateus" (cons FORMA2 (cons FORMA6 empty)) "B"))
+(define ALUNO10 (make-aluno "Juliana" (cons FORMA3 (cons FORMA6(cons FORMA7 empty))) "A"))
+
+
+
+;; -----------------
+;; TIPO ListaDeAlunos:
+;; -----------------
+;; Uma ListaDeAlunos é
+  ;; 1. vazia (empty), ou
+  ;; 2. (cons a la), onde
+  ;;     a : aluno
+  ;;     la: ListaAlunos
+
+;; Constantes do tipo ListaDeAlunos:
+(define LISTA1 (cons ALUNO1 (cons ALUNO3 empty)))
+(define LISTA2 (cons ALUNO2 (cons ALUNO4 empty)))
+(define LISTA3 (cons ALUNO6 empty))
+(define LISTA4 (cons ALUNO7 (cons ALUNO8 (cons ALUNO5(cons ALUNO9 (cons ALUNO10 empty))))))
+
+;; ==============================================================
+;; 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+;; ==============================================================
+
+;; ------------------------------
+;; FUNÇÃO  existe-forma-na-lista?: ListaDeFormas TipoDeForma -> Boolean
+;; ------------------------------
+;; objetivo: dado uma lista de formas e um tipo de forma, verifica se há um elemento desse na lista
+;; exemplos:
+;;           (existe-forma-na-lista? LISTA1 "Triângulo") -> #true
+;;           (existe-forma-na-lista? LISTA1 "Círculo") -> #false
+
+;; dada uma lista e uma forma
+(define ( existe-forma-na-lista? lf tf)
+   (cond 
+    ;se a lista é vazia devolve falso
+    [(empty? lf) #false]
+    ;se a lista tem um elemento verifica o primeiro elemento da lista
+    [(string=? (forma-tipo (first lf)) tf) #true]
+    ;senão achou procura no resto da lista
+    [else (existe-forma-na-lista? (rest lf) tf)]     
+    ))
+   
+  (check-expect (existe-forma-na-lista? LISTAFORMA1 "triângulo") #true)
+  (check-expect (existe-forma-na-lista? LISTAFORMA1 "estrela") #false)
+   (check-expect (existe-forma-na-lista? empty "estrela") #false)
+
+;; ==============================================================
+;; 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
+;; ==============================================================
+
+;; ------------------------------
+;; FUNÇÃO remove-formas-mesma-cor
+;; ------------------------------
+
+
+;; ==============================================================
+;; 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 
+;; ==============================================================
+
+
+;; -------------------------
+;; FUNÇÃO  4tipos?:
+;; -------------------------
+
+;; -------------------------
+;; FUNÇÃO  num-min-cores?:
+;; -------------------------
+
+;; -------------------------
+;; FUNÇÃO  num-par-cores?:
+;; -------------------------
+
+      
+;; ==============================================================
+;; 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 
+;; ==============================================================
+
+;; -------------------------
+;; FUNÇÃO  conta-requisitos:
+;; -------------------------
+ 
+
+;; ==============================================================
+;; 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 
+;; ==============================================================
+
+;; -----------------------------
+;; FUNÇÃO atribui-conceito-aluno:
+;; -----------------------------
+
+
+;; ==============================================================
+;; 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 
+;; ==============================================================
+
+;; ------------------------
+;; FUNÇÃO atribui-conceitos:
+;; ------------------------
+
+
+;; ==============================================================
+;; 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8 8
+;; ==============================================================
+
+;; -----------------------------
+;; FUNÇÃO mostra-conceitos-turma:
+;; -----------------------------
