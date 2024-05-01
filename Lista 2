@@ -58,14 +58,107 @@
 ;;                        - estrelas possumes 3 argumentos, o número de pontas, o
 ;;                          raio interno e o raio externo.
 
-(define FORMA1 (make-forma "triângulo-azul" "triângulo" "blue" (cons 10 empty)))
-(define FORMA2 (make-forma "retângulo-laranja" "retângulo" "orange" (cons 20(cons 10 empty))))
-(define FORMA3 (make-forma "círculo-verde" "círculo" "green" (cons 30 empty)))
-(define FORMA4 (make-forma "estrela-vermelha" "estrela" "red" (cons 20(cons 10(cons 5 empty)))))
-(define FORMA5 (make-forma "triângulo-amarelo" "triângulo" "yellow" (cons 10 empty)))
-(define FORMA6 (make-forma "retângulo-azul" "retângulo" "blue" (cons 20(cons 10 empty))))
-(define FORMA7 (make-forma "círculo-vermelho" "círculo" "red" (cons 30 empty)))
-(define FORMA8 (make-forma "estrela-marrom" "estrela" "brown" (cons 20(cons 10(cons 5 empty)))))
+;;estrelas
+(define E1
+       (make-forma
+         "E1"
+          "estrela"
+          "yellow"
+          LN1-EST))
+(define E2
+       (make-forma
+         "E2"
+          "estrela"
+          "orange"
+          LN2-EST))
+(define E3
+       (make-forma
+         "E3"
+          "estrela"
+          "blue"
+          LN3-EST))
+(define E4
+       (make-forma
+         "E4"
+          "estrela"
+          "yellow"
+          LN4-EST))
+;;circulos
+   (define C1
+       (make-forma
+         "C1"
+          "círculo"
+          "blue"
+          LN1-CIReTRIAN))
+   (define C2
+       (make-forma
+         "C2"
+          "círculo"
+          "red"
+          LN2-CIReTRIAN))
+   (define C3
+       (make-forma
+         "C3"
+          "círculo"
+          "brown"
+          LN3-CIReTRIAN))
+     (define C4
+       (make-forma
+         "C3"
+          "círculo"
+          "red"
+          LN4-CIReTRIAN))
+
+;;triangulos:
+   (define T1
+       (make-forma
+         "T1"
+          "triângulo"
+          "red"
+          LN1-CIReTRIAN))
+     (define T2
+       (make-forma
+         "T2"
+          "triângulo"
+          "green"
+          LN2-CIReTRIAN))
+   (define T3
+       (make-forma
+         "T3"
+          "triângulo"
+          "yellow"
+          LN3-CIReTRIAN))
+     (define T4
+       (make-forma
+         "T4"
+          "triângulo"
+          "green"
+          LN4-CIReTRIAN))
+;;retangulos:
+ (define R1
+       (make-forma
+         "R1"
+          "retângulo"
+          "red"
+          LN1-RET))
+ (define R2
+       (make-forma
+         "R2"
+          "retângulo"
+          "yellow"
+          LN2-RET))
+ (define R3
+       (make-forma
+         "R3"
+          "retângulo"
+          "blue"
+          LN3-RET))
+ (define R4
+       (make-forma
+         "R4"
+          "retângulo"
+          "blue"
+          LN4-RET))
 ;; -------------------
 ;; TIPO ListaDeFormas:
 ;; -------------------
@@ -78,6 +171,16 @@
 (define LISTAFORMA1 (cons FORMA1 (cons FORMA2 (cons FORMA3 empty))))
 (define LISTAFORMA2 (cons FORMA4 (cons FORMA6 (cons FORMA7 empty))))
 (define LISTAFORMA3 (cons FORMA8 (cons FORMA5 empty)))
+(define LF0   empty)                                                            ;e
+(define LF1  (cons R1 empty))                                                   ;d
+(define LF2  (cons R3 (cons C1 empty)))                                         ;c
+(define LF3  (cons C1 (cons E1 (cons R3 empty))))                               ;d
+(define LF4  (cons C2 (cons E1 (cons T1 empty))))                               ;c
+(define LF5 (cons E2 (cons T2 (cons R2 (cons C2 empty)))))                      ;a    
+(define LF6 (cons E3 (cons T3 (cons R3 (cons C3 empty)))))                      ;b
+(define LF7 (cons E4 (cons T4 (cons R4 (cons C4 empty)))))                      ;c
+(define LF8 (cons T1 (cons R1 (cons C1 (cons E1 empty)))))                      ;
+(define LF9 (cons T2 (cons R2 (cons C2 (cons E2 empty)))))                      ;
 
 
 ;; -----------
@@ -230,14 +333,14 @@
 ;;           (existe-forma-na-lista? LISTAFORMA2 "estrela") -> #false
 
 ;; dada uma lista e uma forma
-(define ( existe-forma-na-lista? lf tf)
+(define ( existe-forma-na-lista? LF tipo)
    (cond 
     ;se a lista é vazia devolve falso
-    [(empty? lf) #false]
+    [(empty? LF) #false]
     ;se a lista tem um elemento verifica o primeiro elemento da lista
-    [(string=? (forma-tipo (first lf)) tf) #true]
+    [(string=? (forma-tipo (first LF)) tipo) #true]
     ;senão achou procura no resto da lista
-    [else (existe-forma-na-lista? (rest lf) tf)]     
+    [else (existe-forma-na-lista? (rest LF) tipo)]     
     ))
    
   (check-expect (existe-forma-na-lista? LISTAFORMA1 "triângulo") #true)
@@ -248,10 +351,25 @@
 ;; 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
 ;; ==============================================================
 
-;; ------------------------------
-;; FUNÇÃO remove-formas-mesma-cor
-;; ------------------------------
-
+(define(remove-formas-mesma-cor @LF tipo)
+  (cond
+    ;; Se LF (Lista de formas) estiver vazia, retorna #false
+    [(empty? @LF) empty]
+   
+    [(> (conta-formas-cor @LF (forma-cor (first @LF))) 1)
+     ;Executa a função remove-formas-mesma-cor com o resto da lista LF
+     (remove-formas-mesma-cor (rest @LF) tipo)] 
+    ;Caso contrário
+    [else
+     ;Cria a lista com o primeiro elemento da lista LF e executa 
+     ;a função remove-formas-mesma-cor com o resto da lista
+     (cons (first @LF)
+           (remove-formas-mesma-cor (rest @LF) tipo))]))
+;;testes:
+(check-expect(remove-formas-mesma-cor LF1 "red")
+             (cons (make-forma "R1" "retângulo" "red" (cons 2 (cons 4 '()))) '()))
+(check-expect(remove-formas-mesma-cor LF3 "blue")
+             (cons (make-forma "E1" "estrela" "yellow" (cons 1 (cons 3 (cons 5 '())))) (cons (make-forma "R3" "retângulo" "blue" (cons 10 (cons 12 '()))) '())))
 
 ;; ==============================================================
 ;; 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 
