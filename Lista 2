@@ -41,7 +41,33 @@
 ;; Uma ListaDeNumeros é
 ;; 1. empty (lista vazia), ou
 ;; 2. (cons n ln), onde n: Número e ln: ListaDeNumeros 
-
+;;retangulos
+(define LN1-RET
+         (cons 2(cons 4 empty)))
+(define LN2-RET
+         (cons 6(cons 8 empty)))
+(define LN3-RET
+         (cons 10(cons 12 empty)))
+(define LN4-RET
+         (cons 14(cons 16 empty)))
+;;estrela:
+(define LN1-EST
+         (cons 1(cons 3 (cons 5 empty))))
+(define LN2-EST
+         (cons 7(cons 9 (cons 11 empty))))
+(define LN3-EST
+         (cons 13(cons 15 (cons 17 empty))))
+(define LN4-EST
+         (cons 19(cons 21 (cons 23 empty))))
+;;circulos e triangulos
+(define LN1-CIReTRIAN
+         (cons 2 empty))
+(define LN2-CIReTRIAN
+         (cons 8 empty))
+(define LN3-CIReTRIAN
+         (cons 12 empty))
+(define LN4-CIReTRIAN
+         (cons 24 empty))
 ;; -----------
 ;; TIPO Forma:
 ;; -----------
