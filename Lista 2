@@ -376,7 +376,7 @@
 
 (define(remove-formas-mesma-cor @LF tipo)
   (cond
-    ;; Se LF (Lista de formas) estiver vazia, retorna #false
+    ;; Se LF (Lista de formas) estiver vazia, retorna vazia
     [(empty? @LF) empty]
    
     [(> (conta-formas-cor @LF (forma-cor (first @LF))) 1)
