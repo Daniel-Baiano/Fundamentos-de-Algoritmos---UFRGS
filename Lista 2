@@ -9,7 +9,7 @@
 ;; 1.
 ;; 2.
 ;; 3. Gabrielly Christine dos Santos Moraes 00343872
-;; 4.
+;; 4. Yasmin Chaves Scimczak Medeiros 00344643
 ;#####################################################################################################
 
 ;; ========================================================================================
@@ -41,7 +41,6 @@
 ;; Uma ListaDeNumeros é
 ;; 1. empty (lista vazia), ou
 ;; 2. (cons n ln), onde n: Número e ln: ListaDeNumeros 
-;;retangulos
 (define LN1-RET
          (cons 2(cons 4 empty)))
 (define LN2-RET
@@ -194,9 +193,6 @@
   ;;     f : Forma
   ;;     lf: ListaFormas
 
-(define LISTAFORMA1 (cons FORMA1 (cons FORMA2 (cons FORMA3 empty))))
-(define LISTAFORMA2 (cons FORMA4 (cons FORMA6 (cons FORMA7 empty))))
-(define LISTAFORMA3 (cons FORMA8 (cons FORMA5 empty)))
 (define LF0   empty)                                                            ;e
 (define LF1  (cons R1 empty))                                                   ;d
 (define LF2  (cons R3 (cons C1 empty)))                                         ;c
@@ -316,18 +312,19 @@
 
 
 ;; Constantes do tipo Aluno:
+;; Constantes do tipo Aluno:
 
-(define ALUNO1 (make-aluno "Pedro" (cons FORMA1 empty) "C"))
-(define ALUNO2 (make-aluno "João" (cons FORMA1 (cons FORMA2 empty)) "A"))
-(define ALUNO3 (make-aluno "Ana" (cons FORMA3 (cons FORMA4 empty)) "A")) 
-(define ALUNO4 (make-aluno "Bianca" (cons FORMA2 (cons FORMA4 empty)) "A"))
-(define ALUNO5 (make-aluno "Julia" (cons FORMA5 (cons FORMA6(cons FORMA7 empty))) "A"))
+(define ALUNO1 (make-aluno "Pedro" LF1 "C"))
+(define ALUNO2 (make-aluno "João" LF2 "A"))
+(define ALUNO3 (make-aluno "Ana" LF3  "A")) 
+(define ALUNO4 (make-aluno "Bianca" LF2 "A"))
+(define ALUNO5 (make-aluno "Julia" LF3 "A"))
 
-(define ALUNO6 (make-aluno "Julio" empty "D"))
-(define ALUNO7 (make-aluno "Lucas" (cons FORMA1 (cons FORMA5 empty)) "A"))
-(define ALUNO8 (make-aluno "Maria" (cons FORMA8 (cons FORMA7 empty)) "D")) 
-(define ALUNO9 (make-aluno "Mateus" (cons FORMA2 (cons FORMA6 empty)) "B"))
-(define ALUNO10 (make-aluno "Juliana" (cons FORMA3 (cons FORMA6(cons FORMA7 empty))) "A"))
+(define ALUNO6 (make-aluno "Julio" LF0 "D"))
+(define ALUNO7 (make-aluno "Lucas" LF1 "A"))
+(define ALUNO8 (make-aluno "Maria" LF8 "D")) 
+(define ALUNO9 (make-aluno "Mateus"LF2 "B"))
+(define ALUNO10 (make-aluno "Juliana" LF3 "A"))
 
 
 
@@ -369,9 +366,9 @@
     [else (existe-forma-na-lista? (rest LF) tipo)]     
     ))
    
-  (check-expect (existe-forma-na-lista? LISTAFORMA1 "triângulo") #true)
-  (check-expect (existe-forma-na-lista? LISTAFORMA1 "estrela") #false)
-   (check-expect (existe-forma-na-lista? empty "estrela") #false)
+  (check-expect (existe-forma-na-lista? LF6 "triângulo") #true)
+  (check-expect (existe-forma-na-lista? LF1 "estrela") #false)
+   (check-expect (existe-forma-na-lista? LF0 "estrela") #false)
 
 ;; ==============================================================
 ;; 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
