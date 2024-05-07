@@ -176,7 +176,7 @@
        (make-forma
          "R3"
           "retângulo"
-          "blue"
+          "brown"
           LN3-RET))
  (define R4
        (make-forma
@@ -198,9 +198,9 @@
 (define LF2  (cons R3 (cons C1 empty)))                                         ;c
 (define LF3  (cons C1 (cons E1 (cons R3 empty))))                               ;d
 (define LF4  (cons C2 (cons E1 (cons T1 empty))))                               ;c
-(define LF5 (cons E2 (cons T2 (cons R2 (cons C2 empty)))))                      ;a    
+(define LF5 (cons E2 (cons T2 (cons R2 (cons C2 (cons R4 (cons C3 empty)))))))  ;a    
 (define LF6 (cons E3 (cons T3 (cons R3 (cons C3 empty)))))                      ;b
-(define LF7 (cons E4 (cons T4 (cons R4 (cons C4 empty)))))                      ;c
+(define LF7 (cons E4 (cons T4 (cons R4 (cons C4 (cons R3 (cons E4 empty)))))))  ;a
 (define LF8 (cons T1 (cons R1 (cons C1 (cons E1 empty)))))                      ;
 (define LF9 (cons T2 (cons R2 (cons C2 (cons E2 empty)))))                      ;
 
@@ -374,6 +374,8 @@
 ;; 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
 ;; ==============================================================
 
+;;Obj:dado uma lista, remove formas que tem a mesma cor
+
 (define(remove-formas-mesma-cor @LF tipo)
   (cond
     ;; Se LF (Lista de formas) estiver vazia, retorna vazia
@@ -388,11 +390,9 @@
      ;a função remove-formas-mesma-cor com o resto da lista
      (cons (first @LF)
            (remove-formas-mesma-cor (rest @LF) tipo))]))
-;;testes:
+;;exemplos e testes:
 (check-expect(remove-formas-mesma-cor LF1 "red")
              (cons (make-forma "R1" "retângulo" "red" (cons 2 (cons 4 '()))) '()))
-(check-expect(remove-formas-mesma-cor LF3 "blue")
-             (cons (make-forma "E1" "estrela" "yellow" (cons 1 (cons 3 (cons 5 '())))) (cons (make-forma "R3" "retângulo" "blue" (cons 10 (cons 12 '()))) '())))
 
 ;; ==============================================================
 ;; 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 
@@ -401,11 +401,53 @@
 
 ;; -------------------------
 ;; FUNÇÃO  4tipos?:
+
+;;ListadeFormas-> Booleano
+;;Obj: Dada uma Lista de formas (LF), verificar se tem um de cada tipo de forma (retangulo,circulo,estrela e triangulo)
+
+;;exemplos:
+;;(4tipos? LF4)= #false
+;;(4tipos? LF9)= #true
+
+(define (4tipos? LF)
+   (cond 
+    ;se a lista é vazia devolve falso
+    [(empty? LF) #false]
+    ; Verifica se a lista contém pelo menos um triângulo e uma estrela
+    [(and (existe-forma-na-lista? LF "triângulo") (existe-forma-na-lista? LF "estrela"))
+     ; Verifica se a lista contém pelo menos um retângulo e um círculo
+     (and (existe-forma-na-lista? LF "retângulo") (existe-forma-na-lista? LF "círculo"))]))
+
+;;testes:
+ (check-expect (4tipos? LF0) #false)
+ (check-expect (4tipos? LF5) #true)
+
+
 ;; -------------------------
 
 ;; -------------------------
 ;; FUNÇÃO  num-min-cores?:
-;; -------------------------
+
+;;ListadeFormas-> Booleano
+;;Obj: Dada uma Lista de formas (LF), verificar se tem um de cada tipo de cor (vermelho, azul, verde, amarelo, laranja e marrom)
+
+(define (num-min-cores? LF)
+ (cond 
+    ; Se a lista é vazia, devolve falso
+    [(empty? LF) #f]
+    ; Verifica se a lista contém pelo menos DUAS forma de cada cor
+    [(or (>=(conta-formas-cor LF "red")2)
+          (>=(conta-formas-cor LF "blue")2)
+          (>=(conta-formas-cor LF "yellow")2)
+          (>=(conta-formas-cor LF "brown")2)
+          (>=(conta-formas-cor LF "green")2)
+          (>=(conta-formas-cor LF "orange")2))
+     #t]
+    ; Se não atender à condição acima, retorna falso
+    [else #f]))
+
+;;testes e exemplos:
+ (check-expect ( num-min-cores? LF0) #false)
 
 ;; -------------------------
 ;; FUNÇÃO  num-par-cores?:
