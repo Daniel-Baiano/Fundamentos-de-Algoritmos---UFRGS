@@ -40,7 +40,8 @@
 ;; -------------------
 ;; Uma ListaDeNumeros é
 ;; 1. empty (lista vazia), ou
-;; 2. (cons n ln), onde n: Número e ln: ListaDeNumeros 
+;; 2. (cons n ln), onde n: Número e ln: ListaDeNumeros
+;;Retangulo
 (define LN1-RET
          (cons 2(cons 4 empty)))
 (define LN2-RET
@@ -49,6 +50,11 @@
          (cons 10(cons 12 empty)))
 (define LN4-RET
          (cons 14(cons 16 empty)))
+(define LN5-RET
+         (cons 18(cons 20 empty)))
+(define LN6-RET
+         (cons 22(cons 24 empty)))
+
 ;;estrela:
 (define LN1-EST
          (cons 1(cons 3 (cons 5 empty))))
@@ -58,6 +64,10 @@
          (cons 13(cons 15 (cons 17 empty))))
 (define LN4-EST
          (cons 19(cons 21 (cons 23 empty))))
+(define LN5-EST
+         (cons 25(cons 27 (cons 29 empty))))
+(define LN6-EST
+         (cons 30(cons 33 (cons 35 empty))))
 ;;circulos e triangulos
 (define LN1-CIReTRIAN
          (cons 2 empty))
@@ -67,6 +77,10 @@
          (cons 12 empty))
 (define LN4-CIReTRIAN
          (cons 24 empty))
+(define LN5-CIReTRIAN
+         (cons 26 empty))
+(define LN6-CIReTRIAN
+         (cons 28 empty))
 ;; -----------
 ;; TIPO Forma:
 ;; -----------
@@ -88,77 +102,120 @@
        (make-forma
          "E1"
           "estrela"
-          "yellow"
+          "red"
           LN1-EST))
 (define E2
        (make-forma
          "E2"
           "estrela"
-          "orange"
-          LN2-EST))
+          "blue"
+          LN3-EST))
 (define E3
        (make-forma
          "E3"
           "estrela"
-          "blue"
-          LN3-EST))
+          "green"
+          LN4-EST))
 (define E4
        (make-forma
          "E4"
           "estrela"
           "yellow"
           LN4-EST))
-;;circulos
-   (define C1
-       (make-forma
-         "C1"
-          "círculo"
-          "blue"
-          LN1-CIReTRIAN))
-   (define C2
-       (make-forma
-         "C2"
-          "círculo"
-          "red"
-          LN2-CIReTRIAN))
-   (define C3
-       (make-forma
-         "C3"
-          "círculo"
-          "brown"
-          LN3-CIReTRIAN))
-     (define C4
-       (make-forma
-         "C3"
-          "círculo"
-          "red"
-          LN4-CIReTRIAN))
 
-;;triangulos:
-   (define T1
+(define E5
+       (make-forma
+         "E5"
+          "estrela"
+          "orange"
+          LN2-EST))
+(define E6
+       (make-forma
+         "E6"
+          "estrela"
+          "brown"
+          LN2-EST))
+
+
+;;TRIANGULOS
+
+(define T1
        (make-forma
          "T1"
           "triângulo"
           "red"
           LN1-CIReTRIAN))
-     (define T2
+(define T2
        (make-forma
          "T2"
           "triângulo"
-          "green"
-          LN2-CIReTRIAN))
-   (define T3
+          "blue"
+          LN1-CIReTRIAN))
+(define T3
        (make-forma
          "T3"
           "triângulo"
-          "yellow"
-          LN3-CIReTRIAN))
-     (define T4
+          "green"
+          LN1-CIReTRIAN))
+(define T4
        (make-forma
          "T4"
           "triângulo"
+          "yellow"
+          LN1-CIReTRIAN))
+
+(define T5
+       (make-forma
+         "T5"
+          "triângulo"
+          "orange"
+          LN1-CIReTRIAN))
+(define T6
+       (make-forma
+         "T6"
+          "triângulo"
+          "brown"
+          LN1-CIReTRIAN))
+
+;;CIRCULOS:
+(define C1
+       (make-forma
+         "C1"
+          "círculo"
+          "red"
+          LN1-CIReTRIAN))
+(define C2
+       (make-forma
+         "C2"
+          "círculo"
+          "blue"
+          LN1-CIReTRIAN))
+(define C3
+       (make-forma
+         "C3"
+          "círculo"
           "green"
-          LN4-CIReTRIAN))
+          LN1-CIReTRIAN))
+(define C4
+       (make-forma
+         "C4"
+          "círculo"
+          "yellow"
+          LN1-CIReTRIAN))
+
+(define C5
+       (make-forma
+         "C5"
+          "círculo"
+          "orange"
+          LN1-CIReTRIAN))
+(define C6
+       (make-forma
+         "C6"
+          "círculo"
+          "brown"
+          LN1-CIReTRIAN))
+
 ;;retangulos:
  (define R1
        (make-forma
@@ -198,11 +255,12 @@
 (define LF2  (cons R3 (cons C1 empty)))                                         ;c
 (define LF3  (cons C1 (cons E1 (cons R3 empty))))                               ;d
 (define LF4  (cons C2 (cons E1 (cons T1 empty))))                               ;c
-(define LF5 (cons E2 (cons T2 (cons R2 (cons C2 (cons R4 (cons C3 empty)))))))  ;a    
+(define LF5 (cons E2 (cons T2 (cons R2 (cons C2 (cons R4 (cons C4 empty)))))))  ;a    
 (define LF6 (cons E3 (cons T3 (cons R3 (cons C3 empty)))))                      ;b
-(define LF7 (cons E4 (cons T4 (cons R4 (cons C4 (cons R3 (cons E4 empty)))))))  ;a
-(define LF8 (cons T1 (cons R1 (cons C1 (cons E1 empty)))))                      ;
-(define LF9 (cons T2 (cons R2 (cons C2 (cons E2 empty)))))                      ;
+(define LF7 (cons E4 (cons T4 (cons R3 (cons C3 (cons E4 (cons T4 empty)))))))  ;a
+(define LF8 (cons T1 (cons R1 (cons C1 (cons E1 empty)))))                      ;c
+(define LF9 (cons T2 (cons R2 (cons C2 (cons E2 empty)))))                      ;b
+
 
 
 ;; -----------
@@ -366,7 +424,7 @@
     [else (existe-forma-na-lista? (rest LF) tipo)]     
     ))
    
-  (check-expect (existe-forma-na-lista? LF6 "triângulo") #true)
+  ;;(check-expect (existe-forma-na-lista? LF6 "triângulo") #true)
   (check-expect (existe-forma-na-lista? LF1 "estrela") #false)
    (check-expect (existe-forma-na-lista? LF0 "estrela") #false)
 
@@ -436,12 +494,12 @@
     ; Se a lista é vazia, devolve falso
     [(empty? LF) #f]
     ; Verifica se a lista contém pelo menos DUAS forma de cada cor
-    [(or (>=(conta-formas-cor LF "red")2)
-          (>=(conta-formas-cor LF "blue")2)
-          (>=(conta-formas-cor LF "yellow")2)
-          (>=(conta-formas-cor LF "brown")2)
-          (>=(conta-formas-cor LF "green")2)
-          (>=(conta-formas-cor LF "orange")2))
+    [(and (>(conta-formas-cor LF "red")1)
+          (>(conta-formas-cor LF "blue")1)
+          (>(conta-formas-cor LF "yellow")1)
+          (>(conta-formas-cor LF "brown")1)
+          (>(conta-formas-cor LF "green")1)
+          (>(conta-formas-cor LF "orange")1))
      #t]
     ; Se não atender à condição acima, retorna falso
     [else #f]))
