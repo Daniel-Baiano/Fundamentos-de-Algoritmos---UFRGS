@@ -463,7 +463,7 @@
 ;; ==============================================================
 ;; 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
 ;; ==============================================================
-;; remove-formas-mesma-cor: ListaDeFormas tipo -> ListaDeFormas
+;; remove-formas-mesma-cor: ListaDeFormas -> ListaDeFormas
 
 ;;Objetivo: Dado uma lista de formas, remove formas que tem a mesma cor.
 ;;Exemplos:
