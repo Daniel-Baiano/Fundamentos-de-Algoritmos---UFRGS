@@ -524,31 +524,45 @@
  (check-expect (4tipos? LF0) #f)
  (check-expect (4tipos? LF5) #t)
 
-;; -------------------------
 
 ;; -------------------------
-;; FUNÇÃO  num-min-cores?:
+;; num-min-cores?
+;; -------------------------
+;; FUNÇÃO  num-min-cores?: ListadeFormas-> Booleano 
+;; Objetivo: Dada uma lista de formas, verifica se há duas cores diferentes na lista. Se verdadeiro, devolve true. Senão, retorna false.
 
-;;ListadeFormas-> Booleano
-;;Obj: Dada uma Lista de formas (LF), verificar se tem um de cada tipo de cor (vermelho, azul, verde, amarelo, laranja e marrom)
 
-(define (num-min-cores? LF)
- (cond 
-    ; Se a lista é vazia, devolve falso
+(define  (num-min-cores? LF) ;; dada uma lista de formas
+   (cond
+    ;; verifica se há no mínimo duas cores
+    [ (and (existe-cor? LF " red")
+       (existe-cor? LF " blue")
+       (existe-cor? LF "green")
+       (existe-cor? LF "orange")
+       (existe-cor? LF  "brown"
+       (existe-cor? LF " yellow"))) #t]))
+
+     
+     
+;;FUNÇÃO auxiliar:
+ 
+;; existe-cor?: ListaDeFormas cor -> Booleano
+;; ------------------------------
+;; objetivo: dado uma lista de formas e um tipo de cor, verifica se há um elemento dessa cor na lista
+;; exemplos:
+;;           (existe-cor? LISTAFORMA1 "red") -> #true
+;;           (existe-cor? LISTAFORMA2 "blue") -> #false
+
+;; dada uma lista e uma forma
+(define ( existe-cor? LF cor)
+   (cond 
+    ;se a lista é vazia devolve falso
     [(empty? LF) #f]
-    ; Verifica se a lista contém pelo menos DUAS forma de cada cor
-    [(and (>(conta-formas-cor LF "red")1)
-          (>(conta-formas-cor LF "blue")1)
-          (>(conta-formas-cor LF "yellow")1)
-          (>(conta-formas-cor LF "brown")1)
-          (>(conta-formas-cor LF "green")1)
-          (>(conta-formas-cor LF "orange")1))
-     #t]
-    ; Se não atender à condição acima, retorna falso
-    [else #f]))
-
-;;testes e exemplos:
- (check-expect ( num-min-cores? LF0) #false)
+    ;se o primeiro elemento da lista possui essa cor, retorna true.
+    [(string=? (forma-cor (first LF)) cor) #true]
+    ;senão, retorna o próximo elemento da lista.
+    [else (existe-cor? (rest LF) cor)]     
+    ))
 
 ;; -------------------------
 ;; FUNÇÃO  num-par-cores?:
