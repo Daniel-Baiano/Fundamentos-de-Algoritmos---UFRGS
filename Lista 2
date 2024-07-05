@@ -364,7 +364,39 @@
 ;; ========================================================================================
 
 
-;; ==============================================================
+;; =============================;; remove-formas-mesma-cor: ListaDeFormas tipo -> ListaDeFormas
+
+;;Objetivo: Dado uma lista de formas, remove formas que tem a mesma cor.
+;;Exemplos:
+;;1° exemplo: (remove-formas-mesma-cor LF4) -> ((cons (make-forma "E1" "estrela" "yellow" (cons 1 (cons 3 (cons 5 empty)))) (cons (make-forma "T1" "triângulo" "red" (cons 2 empty)) empty)))
+
+;;2° exemplo: (remove-formas-mesma-cor LF1) -> (cons (make-forma "R1" "retângulo" "red" (cons 2 (cons 4 empty))) empty))
+
+
+;;corpo
+(define(remove-formas-mesma-cor @LF);; Dada uma lista de formas 
+  (cond
+    ;; Se LF (Lista de formas) estiver vazia, retorna vazia
+    [(empty? @LF) empty]
+   
+    ;; Se a cor da primeira forma aparecer mais de uma vez na lista,
+    [(> (conta-formas-cor @LF (forma-cor (first @LF))) 1)
+     
+     ;Executa a função remove-formas-mesma-cor com o resto da lista LF
+     (remove-formas-mesma-cor (rest @LF))] 
+    ;Caso contrário
+    [else
+     ;Cria a lista com o primeiro elemento da lista LF e executa 
+     ;a função remove-formas-mesma-cor com o resto da lista
+     (cons (first @LF)
+           (remove-formas-mesma-cor (rest @LF)))]))
+
+;; Testes:
+(check-expect(remove-formas-mesma-cor LF1)
+(cons (make-forma "R1" "retângulo" "red" (cons 2 (cons 4 empty))) empty))
+
+(check-expect (remove-formas-mesma-cor LF4) (cons (make-forma "E1" "estrela" "yellow" (cons 1 (cons 3 (cons 5 empty)))) (cons (make-forma "T1" "triângulo" "red" (cons 2 empty)) empty))) 
+=================================
 ;; 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
 ;; ==============================================================
 
@@ -431,26 +463,39 @@
 ;; ==============================================================
 ;; 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
 ;; ==============================================================
+;; remove-formas-mesma-cor: ListaDeFormas tipo -> ListaDeFormas
 
-;;Obj:dado uma lista, remove formas que tem a mesma cor
+;;Objetivo: Dado uma lista de formas, remove formas que tem a mesma cor.
+;;Exemplos:
+;;1° exemplo: (remove-formas-mesma-cor LF4) -> ((cons (make-forma "E1" "estrela" "yellow" (cons 1 (cons 3 (cons 5 empty)))) (cons (make-forma "T1" "triângulo" "red" (cons 2 empty)) empty)))
 
-(define(remove-formas-mesma-cor @LF tipo)
+;;2° exemplo: (remove-formas-mesma-cor LF1) -> (cons (make-forma "R1" "retângulo" "red" (cons 2 (cons 4 empty))) empty))
+
+
+;;corpo
+(define(remove-formas-mesma-cor @LF);; Dada uma lista de formas 
   (cond
     ;; Se LF (Lista de formas) estiver vazia, retorna vazia
     [(empty? @LF) empty]
    
+    ;; Se a cor da primeira forma aparecer mais de uma vez na lista,
     [(> (conta-formas-cor @LF (forma-cor (first @LF))) 1)
+     
      ;Executa a função remove-formas-mesma-cor com o resto da lista LF
-     (remove-formas-mesma-cor (rest @LF) tipo)] 
+     (remove-formas-mesma-cor (rest @LF))] 
     ;Caso contrário
     [else
      ;Cria a lista com o primeiro elemento da lista LF e executa 
      ;a função remove-formas-mesma-cor com o resto da lista
      (cons (first @LF)
-           (remove-formas-mesma-cor (rest @LF) tipo))]))
-;;exemplos e testes:
-(check-expect(remove-formas-mesma-cor LF1 "red")
-             (cons (make-forma "R1" "retângulo" "red" (cons 2 (cons 4 '()))) '()))
+           (remove-formas-mesma-cor (rest @LF)))]))
+
+;; Testes:
+(check-expect(remove-formas-mesma-cor LF1)
+(cons (make-forma "R1" "retângulo" "red" (cons 2 (cons 4 empty))) empty))
+
+(check-expect (remove-formas-mesma-cor LF4) (cons (make-forma "E1" "estrela" "yellow" (cons 1 (cons 3 (cons 5 empty)))) (cons (make-forma "T1" "triângulo" "red" (cons 2 empty)) empty))) 
+
 
 ;; ==============================================================
 ;; 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 
