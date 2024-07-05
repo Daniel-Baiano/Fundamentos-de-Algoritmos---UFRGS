@@ -501,30 +501,28 @@
 ;; 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 
 ;; ==============================================================
 
-
 ;; -------------------------
 ;; FUNÇÃO  4tipos?:
+;;--------------------------
 
-;;ListadeFormas-> Booleano
-;;Obj: Dada uma Lista de formas (LF), verificar se tem um de cada tipo de forma (retangulo,circulo,estrela e triangulo)
+;;4tipos?: ListadeFormas-> Booleano
+;;Obj: Dada uma Lista de formas (LF), verificar se tem um de cada tipo de forma (retangulo,circulo,estrela e triangulo) na lista, caso tenha devolve true. Caso contrário, retorna false.
 
 ;;exemplos:
 ;;(4tipos? LF4)= #false
 ;;(4tipos? LF9)= #true
 
-(define (4tipos? LF)
+(define (4tipos? LF) ;; Dada uma lista de formas
    (cond 
     ;se a lista é vazia devolve falso
     [(empty? LF) #false]
-    ; Verifica se a lista contém pelo menos um triângulo e uma estrela
-    [(and (existe-forma-na-lista? LF "triângulo") (existe-forma-na-lista? LF "estrela"))
-     ; Verifica se a lista contém pelo menos um retângulo e um círculo
-     (and (existe-forma-na-lista? LF "retângulo") (existe-forma-na-lista? LF "círculo"))]))
+    ; Verifica se a lista contém pelo menos um triângulo, um retângulo, um círculo e uma estrela
+    [(and (existe-forma-na-lista? LF "triângulo") (existe-forma-na-lista? LF "estrela")
+     (existe-forma-na-lista? LF "retângulo") (existe-forma-na-lista? LF "círculo")) #t]))
 
 ;;testes:
- (check-expect (4tipos? LF0) #false)
- (check-expect (4tipos? LF5) #true)
-
+ (check-expect (4tipos? LF0) #f)
+ (check-expect (4tipos? LF5) #t)
 
 ;; -------------------------
 
