@@ -548,7 +548,7 @@
 
 ;;Testes
 (check-expect (num-min-cores? LF6) #t)
-(check-expect (num-min-cores? LF6) #f)    
+(check-expect (num-min-cores? LF1) #f)    
      
 
 
