@@ -525,44 +525,32 @@
  (check-expect (4tipos? LF5) #t)
 
 
+ 
 ;; -------------------------
 ;; num-min-cores?
 ;; -------------------------
 ;; FUNÇÃO  num-min-cores?: ListadeFormas-> Booleano 
 ;; Objetivo: Dada uma lista de formas, verifica se há duas cores diferentes na lista. Se verdadeiro, devolve true. Senão, retorna false.
-
+;; Exemplos:
+;;1° Exemplo: (num-min-cores? LF2) -> true
+;;2° Exemplo: (num-min-cores? LF1) -> false
 
 (define  (num-min-cores? LF) ;; dada uma lista de formas
    (cond
-    ;; verifica se há no mínimo duas cores
-    [ (and (existe-cor? LF " red")
-       (existe-cor? LF " blue")
-       (existe-cor? LF "green")
-       (existe-cor? LF "orange")
-       (existe-cor? LF  "brown"
-       (existe-cor? LF " yellow"))) #t]))
+    ;Se a lista lista_formas está vazia, devolve false
+    [(empty? LF) false]
+    ;;verifica a lista tem tamanho menor que dois, devolve false
+    [(< (length LF) 2) false]
+    ;;verifica se o 1° elemento da lista tem cor diferente ao próximo elemento
+    [ (not (equal?(forma-cor (first LF)) (forma-cor (first (rest LF))))) true]
+    ;;caso contrário, verifica o restante dos elementos da lista de formas
+    [else (num-min-cores? (rest LF))]))
 
+;;Testes
+(check-expect (num-min-cores? LF6) #t)
+(check-expect (num-min-cores? LF6) #f)    
      
-     
-;;FUNÇÃO auxiliar:
- 
-;; existe-cor?: ListaDeFormas cor -> Booleano
-;; ------------------------------
-;; objetivo: dado uma lista de formas e um tipo de cor, verifica se há um elemento dessa cor na lista
-;; exemplos:
-;;           (existe-cor? LISTAFORMA1 "red") -> #true
-;;           (existe-cor? LISTAFORMA2 "blue") -> #false
 
-;; dada uma lista e uma forma
-(define ( existe-cor? LF cor)
-   (cond 
-    ;se a lista é vazia devolve falso
-    [(empty? LF) #f]
-    ;se o primeiro elemento da lista possui essa cor, retorna true.
-    [(string=? (forma-cor (first LF)) cor) #true]
-    ;senão, retorna o próximo elemento da lista.
-    [else (existe-cor? (rest LF) cor)]     
-    ))
 
 ;; -------------------------
 ;; FUNÇÃO  num-par-cores?:
