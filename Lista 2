@@ -6,7 +6,7 @@
 ;; IDENTIFICAÇÃO DO GRUPO
 ;; Escreva abaixo, em ordem alfabética, o nome e número de matrícula de todos os membros do grupo:
 ;;    Nome Sobrenome Matrícula
-;; 1.
+;; 1. Daniel Rocha Silva 00335625
 ;; 2.
 ;; 3. Gabrielly Christine dos Santos Moraes 00343872
 ;; 4. Yasmin Chaves Scimczak Medeiros 00344643
@@ -260,7 +260,8 @@
 (define LF7 (cons E4 (cons T4 (cons R3 (cons C3 (cons E4 (cons T4 empty)))))))  ;a
 (define LF8 (cons T1 (cons R1 (cons C1 (cons E1 empty)))))                      ;c
 (define LF9 (cons T2 (cons R2 (cons C2 (cons E2 empty)))))                      ;b
-
+(define LF10 (cons E1 (cons E4 (cons C2 (cons C4 empty)))))
+(define LF11 (cons R4 (cons R4(cons T2 (cons T2 (cons E1 (cons E1 (cons R2 (cons R2 (cons C1 (cons C1 empty)))))))))))
 
 
 ;; -----------
@@ -514,11 +515,13 @@
 
 (define (4tipos? LF) ;; Dada uma lista de formas
    (cond 
-    ;se a lista é vazia devolve falso
+    ;se a lista for vazia devolve falso
     [(empty? LF) #false]
-    ; Verifica se a lista contém pelo menos um triângulo, um retângulo, um círculo e uma estrela
+    ; Verifica se a lista contém pelo menos um triângulo, um retângulo, um círculo e uma estrela, retornando true se verdadeiro.
     [(and (existe-forma-na-lista? LF "triângulo") (existe-forma-na-lista? LF "estrela")
-     (existe-forma-na-lista? LF "retângulo") (existe-forma-na-lista? LF "círculo")) #t]))
+     (existe-forma-na-lista? LF "retângulo") (existe-forma-na-lista? LF "círculo")) #t]
+    ;;Senão, retorna false
+    [else #f]))
 
 ;;testes:
  (check-expect (4tipos? LF0) #f)
@@ -555,7 +558,29 @@
 ;; -------------------------
 ;; FUNÇÃO  num-par-cores?:
 ;; -------------------------
+;;num-par-cores?: ListaDeFormas -> Booleano
+;;Objetivo: Dada uma lista de formas, verifica se essa lista contém
+;;números pares de formas pintadas de uma mesma cor. Se tiver, retorna true
+;;Exemplos:
+;;         (num-par-cores? LF7) = #false
+;;         (num-par-cores? LF10) = #true
 
+
+(define (num-par-cores? lista_formas)
+  (cond
+    ;Se a lista lista_formas estiver vazia, retorna false
+   [(empty? lista_formas) false]
+   ; Caso contrário, verifica se a quantidade de formas pintadas com a mesma cor é par
+    [else (and (even? (conta-formas-cor lista_formas "red"))
+               (even? (conta-formas-cor lista_formas "blue"))
+               (even? (conta-formas-cor lista_formas "green"))
+               (even? (conta-formas-cor lista_formas "orange"))
+               (even? (conta-formas-cor lista_formas "yellow"))
+               (even? (conta-formas-cor lista_formas "brown")))]))
+    
+;;TESTES     
+(check-expect (num-par-cores? LF10) #true)
+(check-expect (num-par-cores? LF4) #false)        
       
 ;; ==============================================================
 ;; 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 
@@ -564,7 +589,51 @@
 ;; -------------------------
 ;; FUNÇÃO  conta-requisitos:
 ;; -------------------------
- 
+
+;; conta-requisitos: lisaDeFormas -> Número 
+;; Objetivos: Dada uma lista de formas, verifica se há os  4 tipos de forma
+;;e se há pelo menos duas cores diferentes e se há um número par de formas
+;;pintadas com a mesma cor. Cada uma das verificações soma 1.
+;; Exemplos:
+;(conta-requisitos LF10) -> 2
+;(conta-requisitos LF11) -> 3
+
+
+;; Corpo
+
+(define (conta-requisitos LF) ;; Dada uma lista de formas
+  (+ ;;Soma os valores para cada requisito o desenho
+   (conta-booleano (4tipos? LF)) 
+   (conta-booleano (num-min-cores? LF)) 
+   (conta-booleano (num-par-cores? LF))
+
+  )
+ )
+
+;;Testes:
+(check-expect (conta-requisitos LF11) 3)
+(check-expect (conta-requisitos LF10) 2)
+
+
+; Função auxiliar: conta-booleano
+; conta-booleano: booleano -> número
+; Objetivo: Esta função recebe um valor booleano e retorna 1 se for verdadeiro e 0 se for falso.
+; Exemplos:
+; 1° (conta-booleano (4tipos? LF1)) -> 0
+; 2° (conta-booleano (4tipos? LF5)) -> 1
+
+;corpo
+(define (conta-booleano bo)
+  (cond
+   [(equal? bo true) 1] ; Se o valor de 'bo' for igual a true, retorna 1.
+   [else 0] ; Caso contrário, retorna 0.
+   )
+  )
+
+;;Testes:
+(check-expect (conta-booleano (4tipos? LF1)) 0)
+(check-expect (conta-booleano (4tipos? LF5)) 1)
+
 
 ;; ==============================================================
 ;; 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 
