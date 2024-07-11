@@ -644,6 +644,48 @@
 ;; -----------------------------
 
 
+;;  atribui-conceito-aluno: Aluno -> Aluno
+
+;; Objetivo: Dado um registro de um aluno, atribui o conceito para o desenho confome os requisitos, devolvendo o registro do aluno.
+
+;; Exemplos:
+;; 1° Exemplo: (atribui-conceito-aluno ALUNO1) ->  (make-aluno "Pedro" LF1 "D")
+;; 2° Exemplo: (atribui-conceito-aluno ALUNO2) ->  (make-aluno "João" LF2 "C")
+
+
+
+; corpo
+
+(define (atribui-conceito-aluno Aluno)
+  (cond
+   ;; Se o desenho for vazio, retorna o registro do aluno com o conceito E
+   [(empty?  (aluno-desenho Aluno)) (make-aluno (aluno-nome Aluno) 
+                                                       (aluno-desenho Aluno) 
+                                                        "E")]
+   ;; Se o desenho tiver 3 requisitos, retorna o registro do aluno com o conceito A
+   [(equal? 3 (conta-requisitos (aluno-desenho Aluno))) (make-aluno (aluno-nome Aluno) 
+                                                       (aluno-desenho Aluno) 
+                                                        "A")]
+   ;; Se o desenho tiver 2 requisito, retorna o registro do aluno com o conceito B
+   [(equal? 2 (conta-requisitos (aluno-desenho Aluno))) (make-aluno (aluno-nome Aluno) 
+                                                       (aluno-desenho Aluno) 
+                                                        "B")]
+   ;; Se o desenho tiver 1 requisito, retorna o registro do aluno com o conceito C
+   [(equal? 1 (conta-requisitos (aluno-desenho Aluno))) (make-aluno (aluno-nome Aluno) 
+                                                       (aluno-desenho Aluno) 
+                                                        "C")]
+   
+   ;; Se o desenho tiver nenhum requisito, retorna o registro do aluno com o conceito D
+   [ else (make-aluno (aluno-nome Aluno) 
+                                                       (aluno-desenho Aluno) 
+                                                        "D")]
+   ))
+  
+  
+;; TESTES
+(check-expect (atribui-conceito-aluno ALUNO1) (make-aluno "Pedro" LF1 "D"))
+(check-expect (atribui-conceito-aluno ALUNO2) (make-aluno "João" LF2 "C"))
+
 ;; ==============================================================
 ;; 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 
 ;; ==============================================================
