@@ -6,7 +6,7 @@
 ;; IDENTIFICAÇÃO DO GRUPO
 ;; Escreva abaixo, em ordem alfabética, o nome e número de matrícula de todos os membros do grupo:
 ;;    Nome Sobrenome Matrícula
-;; 1. 
+;; 1. André Vitor Gabriel 00297326
 ;; 2. Daniel Rocha Silva 00335625
 ;; 3. Gabrielly Christine dos Santos Moraes 00343872
 ;; 4. Yasmin Chaves Scimczak Medeiros 00344643
@@ -173,11 +173,11 @@
 ;;lista de numeros
 ;;Retangulo
 (define LN1-RET
-         (cons 2(cons 4 empty)))
+         (cons 20(cons 40 empty)))
 (define LN2-RET
-         (cons 6(cons 8 empty)))
+         (cons 60(cons 80 empty)))
 (define LN3-RET
-         (cons 10(cons 12 empty)))
+         (cons 30(cons 23 empty)))
 (define LN4-RET
          (cons 14(cons 16 empty)))
 (define LN5-RET
@@ -187,9 +187,9 @@
 
 ;;estrela:
 (define LN1-EST
-         (cons 1(cons 3 (cons 5 empty))))
+         (cons 8(cons 30 (cons 25 empty))))
 (define LN2-EST
-         (cons 7(cons 9 (cons 11 empty))))
+         (cons 7(cons 27 (cons 43 empty))))
 (define LN3-EST
          (cons 13(cons 15 (cons 17 empty))))
 (define LN4-EST
@@ -200,7 +200,7 @@
          (cons 30(cons 33 (cons 35 empty))))
 ;;circulos e triangulos
 (define LN1-CIReTRIAN
-         (cons 2 empty))
+         (cons 20 empty))
 (define LN2-CIReTRIAN
          (cons 8 empty))
 (define LN3-CIReTRIAN
@@ -482,13 +482,13 @@
    "T1"
    "triângulo"
    "red"
-   (cons 2 '()))
+   (cons 20 '()))
   (cons
    (make-forma
     "T3"
     "triângulo"
     "green"
-    (cons 2 '()))
+    (cons 20 '()))
    '()))))
 
 
@@ -499,13 +499,13 @@
   "T5"
   "triângulo"
   "orange"
-  (cons 2 '()))
+  (cons 20 '()))
  (cons
   (make-forma
    "C1"
    "círculo"
    "red"
-   (cons 2 '()))
+   (cons 20 '()))
   '()))
   )
 ;; ------------------------------
@@ -730,9 +730,9 @@
 (check-expect (atribui-conceitos LISTA2)(cons
  (make-aluno
   "João"
-  (cons  (make-forma   "R3"  "retângulo" "brown" (cons 10 (cons 12 empty)))  (cons  (make-forma "C1" "círculo" "red"(cons 2 empty)) empty))  "C")
+  (cons  (make-forma   "R3"  "retângulo" "brown" (cons 30 (cons 23 empty)))  (cons  (make-forma "C1" "círculo" "red"(cons 20 empty)) empty))  "C")
  (cons (make-aluno "Bianca"
-   (cons (make-forma "R3" "retângulo" "brown" (cons 10 (cons 12 empty))) (cons (make-forma "C1" "círculo" "red" (cons 2 empty)) empty))   "C")
+   (cons (make-forma "R3" "retângulo" "brown" (cons 30 (cons 23 empty))) (cons (make-forma "C1" "círculo" "red" (cons 20 empty)) empty))   "C")
   empty)))
 
 ;; ==============================================================
@@ -742,3 +742,30 @@
 ;; -----------------------------
 ;; FUNÇÃO mostra-conceitos-turma:
 ;; -----------------------------
+
+;;mostra-conceitos-turma: ListaDeAlunos -> Imagem
+;;Objetivo:  Dada uma lista de alunos de uma turma, gera uma imagem
+;;mostrado todos os alunos desta turma, incluindo seus nomes, desenhos e conceitos.
+;;Exemplos:
+;;(mostra-conceitos-turma LISTA2)
+
+(define (mostra-conceitos-turma lda)
+  (cond
+   [(empty? lda) empty-image]
+   [else 
+    (above
+     (beside
+     (text (aluno-nome (first lda)) 24 "black")
+     (text ": " 24 "Black")
+     (desenha-lista-formas (aluno-desenho (first lda)))
+     (text " Conceito: " 24 "Orange")
+     (text (aluno-conceito (first lda)) 24 "Orange"))
+     (mostra-conceitos-turma (rest lda)))
+     ]
+   ))
+
+;(check-expect (mostra-conceitos-turma LISTA2) )
+
+
+
+
