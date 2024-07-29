@@ -142,20 +142,26 @@
 ;; =========================================================================
 ;;                                 QUESTÃO 2
 ;; =========================================================================
-;;Para fazer uma análise de seus funcionários, a empresa quer saber quantos
-;;funcionários há do gênero feminino, gênero masculino ou outro. Construa a função
-;;quantidade-por-genero que, dados um setor e um gênero (use as definições de dados do
-;;template para esses tipos), devolve o número de funcionários deste gênero neste setor
-;;da empresa.
+;; quantidade-por-genero: Setor Genero -> Numero
+;; Dado um setor e um gênero, devolve o número de funcionários deste gênero no setor
 
-
-;; quantidade-por-genero: @Setor genero -> Numero
-;;Dado um Setor e um genero, devolve o numero de pessoas com aquele genero no setor
-(define (quantidade-por-genero @s genero)
+(define (aux lm genero)
   (cond
-    [(empty? @s)+0]
-    [(string=?(funcionario-genero funcionario) genero)+1]))
-    
+    [(empty? lm) 0]
+    [(funcionario? (first lm))
+     (cond
+       [(string=? (funcionario-genero (first lm)) genero)
+        (+ 1 (aux (rest lm) genero))]
+       [else
+        (aux (rest lm) genero)])]
+    [(setor? (first lm))
+     (+ (aux (setor-membros (first lm)) genero)
+        (aux (rest lm) genero))]))
+
+(define (quantidade-por-genero setor genero)
+  (aux (setor-membros setor) genero))
+
+;;check-expect:
 
 ;; =========================================================================
 ;;                                 QUESTÃO 3
