@@ -470,4 +470,127 @@
 ;; =========================================================================
 ;;                                 QUESTÃO 6
 ;; =========================================================================
-;; insere-funcionario: ..... -> ......
+;; Funções auxiliares
+
+;;insere-func-lista: Funcionario Lista-membros -> lista
+;; Objetivo: Dado um funcionario e uma lista de membros, inclui o funcionario nessa lista
+;;1° Exemplo: (insere-func-lista MARIA (list MATEO PEDRO)) -> (list (funcionario "Maria" "Feminino" 15 true) (funcionario "Mateo" "Masculino" 5 false) (funcionario "Pedro" "Masculino" 20 true))
+;; 2° Exemplo: (insere-func-lista MIGUEL (list MATEO PEDRO)) -> (list (funcionario "Miguel" "Outros" 1 true)(funcionario "Mateo" "Masculino" 5 false ) (funcionario "Pedro" "Masculino" 20 true))
+                    
+                     
+                                                              
+(define (insere-func-lista funcionario lista)
+  (cons funcionario lista))
+      
+      
+;;TESTES:
+
+(check-expect (insere-func-lista MARIA (list MATEO PEDRO))  (list (make-funcionario "Maria" "Feminino" 15 true) (make-funcionario "Mateo" "Masculino" 5 false) (make-funcionario "Pedro" "Masculino" 20 true)))
+                    
+ (check-expect (insere-func-lista MIGUEL (list MATEO PEDRO)) (list (make-funcionario "Miguel" "Outros" 1 true)(make-funcionario "Mateo" "Masculino" 5 false ) (make-funcionario "Pedro" "Masculino" 20 true)))                                                                                                                       
+                                                                                                                          
+                                                                                                                          
+                                                                                                                          
+
+;;verifica-setor: String Setor -> Booleano
+;;Objetivo: Dado um string e um setor, verifica se essa string corresponde ao nome do setor dado
+;;Exemplos:
+;;1° Exemplo: (verifica-setor "Graficos do game" GRAPH) -> true                   
+;; 2° exemplo: (verifica-setor "Marketing do game" MARKETING) -> true                   
+                     
+
+(define (verifica-setor setor_string setor)
+    (string=? setor_string (setor-nome setor)))
+
+
+;;TESTES:
+(check-expect (verifica-setor "Marketing do game" MARKETING) #true)
+(check-expect (verifica-setor "Graficos do game" GRAPH) #true)
+
+;;-----------------------
+;; TIPO STRINGOUSETOR
+;;-----------------------
+;;Um StringOuSetor é:
+;; 1. um string, ou
+;; 2. um Setor
+
+
+;;insere-func-lista-arvore: Funcionario String Lista-membros -> StringOuSetor
+;;Objetivo: Dado um funcionário, um string e um setor, verifica se o nome do setor existe e se existir, insere o funcionário neste setor
+;;Exemplos e testes:
+;; 1° Exemplo: (insere-func-lista-arvore PEDRO "Graficos do game" (list MIGUEL RENATA)) -> "Setor não existente"
+;; 2° Exemplo:  (insere-func-lista-arvore PEDRO "Marketing do game" (list GRAPH PROG MARKETING SONS)) ->
+;(setor "Marketing do game"
+;(list
+; (funcionario "Pedro" "Masculino" 20 true)
+; (setor 
+;  "Midia social" 
+;  (list (funcionario "Pamela" "Outros" 1 false) (funcionario "Mateo" "Masculino" 5 false)))( setor "Marketing de ;Conteúdo"
+;    (list (funcionario "Maria" "Feminino" 15 true)(funcionario "Julia" "Feminino" 30 false)))
+
+
+(define (insere-func-lista-arvore funcionario nome_setor lista_membros)
+  ;Dado um funcionario, um string e uma lista de membros, verifica
+  (cond
+    ;Se a lista está vazia, devolve uma mensagem de que o setor não existe
+    [(empty? lista_membros) "Setor não existente"]
+    ;Se o primeiro da lista é um setor, então
+    [(setor? (first lista_membros))
+     (cond
+       ;verifica se o nome dado é o nome do setor, se for devolve o setor atualizado com a inserção do funcionário
+       [(verifica-setor nome_setor (first lista_membros))
+        (make-setor
+         (setor-nome (first lista_membros))
+         (insere-func-lista funcionario (setor-membros (first lista_membros))))]
+       ;Senão,
+       [else
+        ;verifica
+        (cond
+          ;Se chegar ao final da sub-árvore do primeiro da lista e não for o setor, 
+          [(string? (insere-funcionario funcionario nome_setor (first lista_membros)))
+           ;verifica para o resto da lista de membros dada
+           (insere-func-lista-arvore funcionario nome_setor (rest lista_membros))]
+          [else
+           ;Senão chegou ao final da sub-árvore, verifica os filhos desse setor
+           (insere-funcionario funcionario nome_setor (first lista_membros))])])]
+    [else
+     ;Caso não seja um setor, verifica para o resto da lista de membros
+     (insere-func-lista-arvore funcionario nome_setor (rest lista_membros))]))
+
+
+
+;;TESTES:
+(check-expect (insere-func-lista-arvore PEDRO "Graficos do game" (list MIGUEL RENATA))  "Setor não existente")
+(check-expect  (insere-func-lista-arvore PEDRO "Marketing do game" (list GRAPH PROG MARKETING SONS))
+(make-setor "Marketing do game"
+(list
+ (make-funcionario "Pedro" "Masculino" 20 true)
+ (make-setor 
+  "Midia social" 
+  (list (make-funcionario "Pamela" "Outros" 1 false) (make-funcionario "Mateo" "Masculino" 5 false)))(make-setor "Marketing de Conteúdo"
+    (list (make-funcionario "Maria" "Feminino" 15 true)(make-funcionario "Julia" "Feminino" 30 false))))))
+
+
+;;xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+;;              FIM das funções auxiliares
+;;xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+
+;; insere-funcionario: Funcionario Setor Lista-membros -> StringOuSetor
+;;Objetivo: Dado um funcionario, um setor e uma lista de membros, verifica a existencia do setor
+;;e se existir, aloca o funcionario para esse setor
+;;Exemplos e testes:
+;; 1° Exemplo: (insere-funcionario PEDRO "Dubladores" SONS) -> (setor "Dubladores" (list(funcionario "Pedro" "Masculino" 20 true)(funcionario "Miguel" "Outros" 1 true)(funcionario "Renata" "Feminino "3 false))
+
+;; 2° Exemplo:(insere-funcionario MARK "Dubladores" SONS) -> (setor "Dubladores" (list (funcionario "Mark" "Masculino" 1 false)(funcionario "Miguel" "Outros" 1 true)(funcionario "Renata" "Feminino" 3 false))
+
+
+                  
+(define (insere-funcionario funcionario nome_setor arvore)
+  (insere-func-lista-arvore funcionario nome_setor (setor-membros arvore)))
+
+
+;;TESTES
+(check-expect (insere-funcionario PEDRO "Dubladores" SONS) (make-setor "Dubladores" (list (make-funcionario "Pedro" "Masculino" 20 true)(make-funcionario "Miguel" "Outros" 1 true)(make-funcionario "Renata" "Feminino" 3 false))))
+ 
+(check-expect (insere-funcionario MARK "Dubladores" SONS)(make-setor "Dubladores" (list (make-funcionario "Mark" "Masculino" 1 false)(make-funcionario "Miguel" "Outros" 1 true)(make-funcionario "Renata" "Feminino" 3 false))))
