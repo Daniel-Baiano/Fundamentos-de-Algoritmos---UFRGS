@@ -10,7 +10,7 @@
 ;; Escreva abaixo, em ordem alfabética, o nome e número de matrícula de todos os membros do grupo:
 ;;    Nome Sobrenome Matrícula
 ;; 1. André Vitor Gabriel - 00297326
-;; 2.
+;; 2. Daniel Rocha Silva - 00335625
 ;; 3. Gabrielly Christine dos Santos Moraes 00343872
 ;; 4.
 ;#####################################################################################################
@@ -139,6 +139,9 @@
 (define PROG (make-setor "Programação do game"(list DEV QA)))
 (define MARKETING (make-setor "Marketing do game"(list MIDIA CONTEUDO))) 
 (define SONS(make-setor "Trilha sonora do game"(list TRILHA_SONORA DUB)))
+
+;;Setor maior
+(define UFRGS_GAMERS (make-setor "UFRGS_GAMERS" (list GRAPH PROG MARKETING SONS)))
 ;; =========================================================================
 ;;                                 QUESTÃO 2
 ;; =========================================================================
@@ -187,9 +190,174 @@
 ;; =========================================================================
 ;;                                 QUESTÃO 4
 ;; =========================================================================
-;; grau: ..... -> ......
+;---------------------
+; TIPO SetorOuFuncionario
+;---------------------
+;Um SetorOuFuncionario é
+;; 1. um Setor, ou
+;; 2. um Funcionario
 
-;; altura: ..... -> ......
+
+
+
+;; Função Auxiliar ------------------  
+
+;; grau-lista: Lista-membros -> Numero
+;; Objetivo: Dada uma lista de membros, devolve o número de elementos dessa lista.
+;; Exemplos:
+;; 1° Exemplo: (grau-lista (list PEDRO ANTONI)) -> 2
+;; 2° Exemplo: (grau-lista (list YUNY MURI)) - > 2                                     
+                   
+                   
+(define (grau-lista lista)
+  ;Dada uma lista, verfica
+  (cond
+    ;Se a lista está vazia, devolve 0
+    [(empty? lista) 0]
+    ;Senão
+    [else
+     ;Soma 1 ao grau do resto da lista
+     (+ 1 (grau-lista (rest lista)))])) 
+
+
+
+;; testes:
+(check-expect (grau-lista (list PEDRO)) 1)
+(check-expect (grau-lista (list PEDRO MURI)) 2)
+
+
+
+;; grau-setor: SetorOuFuncionario -> Numero
+;; Objetivo: Dado um setor, devolve o grau do setor.
+;; Exemplos:
+;; 1° exemplo: (grau-setor GRAPH) -> 2
+;; 2° exemplo: (grau-setor UFRGS_GAMERS) -> 4
+
+(define (grau-setor setor)
+  ;Dado um setor, verifica
+  (cond
+    ;Se for um funcionario, retorna 0 (porque um funcionario é uma folha e tem grau 0)
+    [(funcionario? setor) 0]
+    ;Senão
+    [else
+     ;Verifica o grau da lista de membros do setor
+     (grau-lista (setor-membros setor))]))
+
+
+;;TESTES:
+(check-expect (grau-setor GRAPH) 2)
+(check-expect (grau-setor UFRGS_GAMERS) 4)
+
+
+
+;; grau-recursivo-lista: Lista-membros -> Lista
+;; Objetivo: Dado uma Lista-membros, devolve uma lista de graus de cada elemento da Lista-membros
+;; Exemplos:
+;; 1° EXEMPLO: (grau-recursivo-lista (list GRAPH PROG)) -> (list 2 2)
+;; 2° EXEMPLO: (grau-recursivo-lista (list MARKETING PROG)) -> (list 2 2)
+
+
+;;Corpo
+(define (grau-recursivo-lista lista)
+  ;Dada uma lista de membros, verifica
+  (cond
+    ;Se a lista está vazia, devolve empty
+    [(empty? lista) empty]
+    ;Senão
+    [else
+     ;Cria uma lista com o grau do primeiro elemento da lista
+     (cons (grau (first lista))
+           ;e o grau do resto da lista
+           (grau-recursivo-lista (rest lista)))]))
+
+;;TESTES
+ (check-expect (grau-recursivo-lista (list GRAPH PROG)) (list 2 2))
+ (check-expect (grau-recursivo-lista (list MARKETING PROG)) (list 2 2))
+
+ 
+;função principal ----------------------
+
+
+;; ;; grau: SetorOuFuncionario -> Número
+;; Objetivo: Dado um setor ou um funcionario, devolve o maior grau da árvore a qual esse setor ou esse
+;; funcionario pertence
+;; Exemplos:
+;; 1° Exemplo:  (grau SONS) -> 2
+;; 2° Exemplo:  (grau UFRGS_GAMERS) -> 4
+
+(define (grau nó)
+  ;Dado um nó (setor ou funcionário), verifica
+  (cond
+    ;Se o nó for um funcionário, devolve 0
+    [(funcionario? nó) 0]
+    ;Senão, devolve
+    [else
+     ;o maior grau da lista formada pelo o grau do setor (já que o nó não é funcionário)
+     (maximo
+      (cons (grau-setor nó)
+            ;e a lista de graus dos elementos da lista de mebros do setor
+            (grau-recursivo-lista (setor-membros nó))))]))
+
+
+;;TESTES
+ (check-expect (grau SONS) 2) 
+ (check-expect (grau UFRGS_GAMERS) 4)
+ 
+ 
+ ;;Função Auxiliar --------------
+ 
+;; altura-lista: Lista-membros -> Lista
+;; Objetivo: Dada uma lista de membros, devolve uma lista com as alturas
+;; de cada elemento da lista
+;; Exemplos
+;; 1° Exemplo: (altura-lista (list PAMELA MATEO)) -> (list 0 0)
+;; 2° Exemplo: (altura-lista (list GRAPH PROG))   -> (list 2 2)               
+
+(define (altura-lista lista)
+  ;Dada uma lista de membros, verifica
+  (cond
+    ;Se a lista está vazia, devolve empty
+    [(empty? lista) empty]
+    ;Senão
+    [else
+     ;cria uma lista com a altura do primeiro elemento da lista
+     (cons (altura (first lista))
+           ;e a altura do resto da lista
+                (altura-lista (rest lista)))]))
+
+
+;Testes:
+(check-expect (altura-lista (list GRAPH PROG)) (list 2 2))
+(check-expect (altura-lista (list PAMELA MATEO)) (list 0 0))
+
+;; Função Principal -----
+
+;; altura: SetorOuFuncionario -> Numero
+;; Objetivo: Dado um setor ou funcionario, devolve a altura da árvore a
+;; qual este setor ou essa árvore fazem parte
+;; Exemplos e testes:
+;; 1° Exemplo: (altura MATEO) -> 0
+;; 2° Exemplo: (altura PROG)   -> 2  
+                   
+
+(define (altura setor)
+  ;Dado um setor ou funcionário, verifica
+  (cond
+    ;Se for um funcionário, devolve 0(porque um funcionario não possui lista de membros) 
+    [(funcionario? setor) 0]
+    ;Se a lista de membros do setor estiver vazia, devolve 0 (porque significa que
+    ;não hhá setores ou funcionarios nesse setor)
+    [(empty? (setor-membros setor)) 0]
+    ;Senão;
+    [else
+     ;soma 1 ao maior número da lista de alturas de setores
+     (+ 1 (maximo (altura-lista (setor-membros setor))))]))
+
+
+;;TESTES
+ (check-expect (altura GRAPH) 2)
+ (check-expect (altura PAMELA) 0)
+ 
 
 ;; =========================================================================
 ;;                                 QUESTÃO 5
