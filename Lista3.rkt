@@ -166,7 +166,23 @@
 ;; =========================================================================
 ;;                                 QUESTÃO 3
 ;; =========================================================================
-;; maximo: ..... -> .....
+;; maximo: ListaDeNumerosNaturais -> Numero
+;;objetivo: Dada uma Lista de numeros naturais, devolve o numero maximo, caso a lista esteja vazia, devolve zero
+(define (maximo ldnn)
+  (cond
+    [(empty? ldnn)0]
+    [(empty? (rest ldnn)) (first ldnn)]
+    [else
+     (cond
+       [(> (first ldnn) (maximo (rest ldnn))) (first ldnn)]
+       [else (maximo (rest ldnn))]
+      )]))
+
+;;check-expect:
+(check-expect (maximo empty) 0)
+(check-expect (maximo (list 1)) 1)
+(check-expect (maximo (list 8 9 14 32 1 0 19 3)) 32)
+(check-expect (maximo (list 90 6 100 87 13)) 100)
 
 ;; =========================================================================
 ;;                                 QUESTÃO 4
