@@ -9,7 +9,7 @@
 ;; IDENTIFICAÇÃO DO GRUPO
 ;; Escreva abaixo, em ordem alfabética, o nome e número de matrícula de todos os membros do grupo:
 ;;    Nome Sobrenome Matrícula
-;; 1.
+;; 1. André Vitor Gabriel - 00297326
 ;; 2.
 ;; 3.
 ;; 4.
