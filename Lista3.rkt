@@ -11,7 +11,7 @@
 ;;    Nome Sobrenome Matrícula
 ;; 1. André Vitor Gabriel - 00297326
 ;; 2.
-;; 3.
+;; 3. Gabrielly Christine dos Santos Moraes 00343872
 ;; 4.
 ;#####################################################################################################
 
@@ -89,7 +89,7 @@
                                 1
                                #false))
 (define HARLEY (make-funcionario "Harley"
-                                "feminino"
+                                "Feminino"
                                 5
                                #false))
 (define BRUCE (make-funcionario "Bruce"
@@ -194,8 +194,111 @@
 ;; =========================================================================
 ;;                                 QUESTÃO 5
 ;; =========================================================================
-;; gera-imagem-setor: ..... -> ......
+;; gera-imagem-setor: setor -> imagem
+;;obj: dado um setor desenhar a arvore desse setor, ou seja, o setor, seus subsetores e os funcionarios
+;;ex:
+;;(gera-imagem-setor DUB)
 
+
+;;; 
+(define (gera-imagem-setor setor)
+  (above
+   (cria-setor setor)
+   (line 0 30 "black")
+   (line 400 0 "black")
+   (cria-imagem-lista (setor-membros setor))))
+
+;;funções auxiliares
+
+;; cria-funcionario: Funcionario -> Imagem
+;; Objetivo: Dado um funcionario, gera uma imagem com o nome e os anos que está na
+;; empresa. A fonte muda de cor conforme o gênero
+
+
+(define (cria-funcionario funcionario)
+  ;Dado um funcionário,
+  (cond
+    ;Se for do genero feminino, cria imagem com o texto vermelho
+    [(string=? (funcionario-genero funcionario) "Feminino")
+     (overlay
+      (beside
+       (text (funcionario-nome funcionario) 10 "red")
+       (rectangle 10 10 "outline" "transparent")
+       (text (number->string (funcionario-anos-empresa funcionario)) 10 "red"))
+      (rectangle 70 40 "outline" "black"))]
+    ;Se for do genero masculino, cria imagem com o texto verde escuro
+    [(string=? (funcionario-genero funcionario) "Masculino")
+     (overlay
+      (beside
+       (text (funcionario-nome funcionario) 10 "darkgreen")
+       (rectangle 10 10 "outline" "transparent")
+       (text (number->string (funcionario-anos-empresa funcionario)) 10 "darkgreen"))
+      (rectangle 70 40 "outline" "black"))]
+    ;Se for de outro genero, cria imagem com texto laranja escuro
+    [(string=? (funcionario-genero funcionario) "Outros")
+     (overlay
+      (beside
+       (text (funcionario-nome funcionario) 10 "darkorange")
+       (rectangle 10 10 "outline" "transparent")
+       (text (number->string (funcionario-anos-empresa funcionario)) 10 "darkorange"))
+      (rectangle 70 40 "outline" "black"))]))
+
+;; cria-destaque: Funcionario -> Imagem
+;; Objetivo: Dado um funcionario, gera uma imagem com o nome e os anos que está na
+;; empresa. A fonte muda de cor conforme o gênero e para funcionários que possuam destaque,
+;; acrescenta uma estrela amarela a imagem
+;;
+
+(define (cria-destaque funcionario)
+  ;Dado um funcionário
+  (cond
+    ;Se esse funcionário possuir destaque, coloca uma estrela amarela
+    [(funcionario-destaque? funcionario)
+     (overlay/align "right" "top"
+      (star-polygon 10 5 2 "solid" "yellow")
+      (cria-funcionario funcionario))]
+    ;Senão, apenas cria a imagem sem a estrela
+    [else
+     (cria-funcionario funcionario)]))
+
+;; cria-setor: Setor -> Imagem
+;; Objetivo: Dado um Setor, gera uma imagem com o nome do setor
+
+
+(define (cria-setor setor)
+  (overlay
+    (text (setor-nome setor) 15 "white")
+   (rectangle 200 50 "solid" "blue")))
+
+;; cria-imagem-lista: Lista-membros -> Imagem
+;; Objetivo: Dado uma lista de membros, gera uma imagem com os elementos da lista, lado a lado
+
+
+(define (cria-imagem-lista lista)
+  ;Dada uma lista de membros
+  (cond
+    ;Se a lista estiver vazia, devolve uma imagem vazia
+    [(empty? lista) empty-image]
+    ;Se o primeiro elemento da lista for um funcionário, cria imagem para funcionario
+    ;e para o resto da lista
+    [(funcionario? (first lista))
+        (beside
+         (above
+          (line 0 35 "black")
+          (cria-destaque (first lista)))
+         (rectangle 10 10 "outline" "transparent")
+         (cria-imagem-lista (rest lista)))]
+    ;Se o primeiro elemento da lista for um setor, cria imagem para setor
+    ;e para os funcionários desse setor
+    [(setor? (first lista))
+        (beside
+         (rectangle 20 20 "outline" "transparent")
+         (above
+          (line 0 30 "black")
+          (cria-setor (first lista))
+          (cria-imagem-lista (setor-membros (first lista))))
+         (rectangle 20 20 "outline" "transparent")
+         (cria-imagem-lista (rest lista)))]))
 ;; =========================================================================
 ;;                                 QUESTÃO 6
 ;; =========================================================================
