@@ -170,7 +170,10 @@
 ;;                                 QUESTÃO 3
 ;; =========================================================================
 ;; maximo: ListaDeNumerosNaturais -> Numero
-;;objetivo: Dada uma Lista de numeros naturais, devolve o numero maximo, caso a lista esteja vazia, devolve zero
+;;objetivo: Dada uma Lista de numeros naturais, devolve o numero maximo, caso a lista esteja vazia, devolve zero.
+;; Exemplos: 1° (maximo empty)- > 0
+;; 2° Exemplo: (maximo (list 1)) -> 1
+
 (define (maximo ldnn)
   (cond
     [(empty? ldnn)0]
