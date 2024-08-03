@@ -147,6 +147,9 @@
 ;; =========================================================================
 ;; quantidade-por-genero: Setor Genero -> Numero
 ;; Dado um setor e um gênero, devolve o número de funcionários deste gênero no setor
+;; Exemplos:
+;;1° (quantidade-por-genero PROG "Feminino") -> 0
+;;2° (quantidade-por-genero PROG "Masculino")- > 2
 
 (define (aux lm genero)
   (cond
@@ -164,7 +167,10 @@
 (define (quantidade-por-genero setor genero)
   (aux (setor-membros setor) genero))
 
-;;check-expect:
+
+;;Testes:
+(check-expect  (quantidade-por-genero PROG "Feminino")0)
+(check-expect (quantidade-por-genero PROG "Masculino")2)
 
 ;; =========================================================================
 ;;                                 QUESTÃO 3
