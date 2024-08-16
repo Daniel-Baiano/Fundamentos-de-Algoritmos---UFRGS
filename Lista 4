@@ -1,0 +1,266 @@
+;#####################################################################################################
+;; IDENTIFICAÇÃO DO GRUPO
+;; Escreva abaixo, em ordem alfabética, o nome e número de matrícula de todos os membros do grupo:
+;;    Nome Sobrenome Matrícula
+;; 1. André Vitor Gabriel - 00297326
+;; 2. Daniel Rocha Silva - 00335625
+;; 3. Gabrielly Christine dos Santos Moraes 00343872
+;; 4. Yasmin Chaves Scimczak Medeiros 00344643
+;#####################################################################################################
+
+;; Funções úteis do pacote de imagens (para maiores informações e exemplos, consultar o manual):
+
+;; rotate: Número Imagem -> Imagem
+;; Dado um ângulo (em graus) e uma imagem, gera uma nova imagem rotacionando a imagem original
+;; no ângulo dado.
+
+;; line: Número Número StringOuPen -> Imagem
+;; Dados as as coordenadas x e y de um ponto e uma cor, desenha uma reta desta cor
+;; ligando este ponto ao ponto (0,0). O terceiro argumento pode ser também uma caneta (estrutura pen), neste caso se
+;; pode fazer linhas diferentes (ver decrição de pen a seguir).
+
+;; Um elemento da estrutura pen é composto por 5 campos: cor (String), largura da linha da caneta (Numero),
+;; estilo (String, pode ser "solid", "dash", "dot", ...), o estilo do início/fim da linha ("round", "butt" ou "projecting") e
+;; o estilo para unir linhas ("round", "bevel", "miter").
+
+;; image-width: Imagem -> Número
+;; Dada uma imagem, devolve a sua largura (em número de pixels)
+
+;; overlay/align/offset: String String Imagem Número Imagem -> Imagem
+;; Dados os tipos de alinhameno das imagens na horizontal ("right", "left" ou "center") e na vertical ("bottom", "top" ou "center"),
+;; a primeira imagem, o valor do descolamento e a segunda imagem, sobrepõe as imagens considerando os alinhamnentos e descolcamento dados.
+
+;; ========================================================================================
+;;                              DEFINIÇÕES DE DADOS
+;; ========================================================================================
+
+;; Definição de constantes:
+
+(define LARGURA 400) ;; largura da cena
+(define ALTURA 400)  ;; altura da cena
+(define CENA-VAZIA (empty-scene 400 400))
+
+;; Definição de tipos de dados:
+;; ------------ 
+;; TIPO FIGURA:
+;; ------------
+(define-struct figura (coord-x coord-y altura cor))
+;; Um elemento do conjunto Figura é
+;;     (make-figura x y a c), onde
+;;   x: Número, é a coordenada x do centro da figura
+;;   y: Número, é a coordenada y do centro da figura
+;;   a : Número, é a altura da figura
+;;   c : Número, número que representa a cor da figura, de acordo com a função gera-cor 
+
+;; =====================
+;; DEFINIÇÕES DE FUNÇÕES
+;; =====================
+
+
+;; ========================
+;; FUNÇÃO GERA-COR:
+;; ========================
+;; gera-cor : Número -> String
+;; Dado um número positivo, devolve uma de 5 cores: "red", "blue", "green", "yellow" ou "cyan".
+;; Exemplos:
+;;      (gera-cor 3) = "yellow"
+;;      (gera-cor 55) = "red"
+(define (gera-cor n)
+  (cond
+    [(= (remainder n 5) 0) "red"]
+    [(= (remainder n 5) 1) "blue"]  
+    [(= (remainder n 5) 2) "green"]
+    [(= (remainder n 5) 3) "yellow"]
+    [(= (remainder n 5) 4) "cyan"]))
+
+;; ========================
+;; FUNÇÃO DESENHA-TRIANGULO:
+;; ========================
+;; desenha-triangulo : Número String ->  Imagem
+;; Obj.: Dados um tamanho de lado e uma cor, desenha um triângulo.
+;; Exemplos:
+;;     (desenha-triangulo 20 "red") = .
+;;     (desenha-triangulo 50 "darkgreen") = .
+(define (desenha-triangulo lado cor)
+  (triangle lado "outline" cor))
+
+;; ========================
+;; FUNÇÃO DESENHA-QUADRADO:
+;; ========================
+;; desenha-quadrado : Número String ->  Imagem
+;; Obj.: Dados um tamanho de lado e uma cor, desenha um quadrado.
+;; Exemplos:
+;;     (desenha-quadrado 20 "red") = .
+;;     (desenha-quadrado 50 "darkgreen") = .
+(define (desenha-quadrado lado cor)
+  (square lado "outline" cor))
+
+;; ========================
+;; FUNÇÃO SIERPISNKI:
+;; ========================
+
+;; sierpinski: Número String -> Imagem
+;; Obj: Dados o tamanho do lado e uma cor, desenha um triângulo de Sierpinski
+;; desta cor cujo lado do triângulo externo é o lado passado como argumento. 
+;; Exemplos:
+;;        (sierpinski 50 "red") = . 
+(define (sierpinski lado cor);; Dados um lado e uma cor 
+  (cond
+       ;; se o lado for muito pequeno, desenhar um triângulo com o lado dado
+       [(<= lado 5)  (desenha-triangulo lado cor)]
+       ;; senão
+       ;;      desenha um triângulo de sierpinksi com a metade do tamanho do lado
+       ;;      e dá o nome de TRIANGULO para este desenho:
+       [else (local
+               (
+                (define TRIANGULO (sierpinski (/ lado 2) cor))
+               )
+                ;; e monta a imagem do triângulo de sierpinski colocando um TRIANGULO
+                ;; acima de dois outros TRIANGULOs:
+               (above TRIANGULO
+                      (beside TRIANGULO TRIANGULO)))]))
+
+;; Argumentação de terminação:
+;; Este programa sempre termina porque:
+;; (a) Existe um caso base (sem recursão) que é quando o tamanho do lado é menor ou igual a 5.
+;;     Neste caso, o programa simplesmente desenha um triângulo com este lado.
+;; (b) Cada chamada recursiva é realizada tendo como argumento a metade do lado,
+;;     que é um número estritamente menor que o lado, e portanto mais próximo
+;;     de se tornar menor que 5 (lembrando que a chamada recursiva só ocorre se o lado for >=5).
+;; (c) As funções <=, above, beside e cond terminam, pois são pré-definidas da linguagem.
+;;     A função desenha-triangulo termina, pois somente usa funções pré-definidas e não tem laços.
+
+;; Não modifique nada até este ponto!!!
+;; A partir daqui estão os exercícios a serem resolvidos.
+
+
+;;===============================================================
+;; 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+;;===============================================================
+
+;; sierpinski-sem-local: Número String -> Imagem
+;; Obj: Dados o tamanho do lado e uma cor, desenha um triângulo de Sierpinski
+;; desta cor cujo lado do triângulo externo é o lado passado como argumento. 
+;; Exemplos:
+        ;;(sierpinski-sem-local 50 "red") = .
+(define (sierpinski-sem-local lado cor)
+    (cond
+       ;; se o lado for muito pequeno, desenhar um triângulo com o lado dado
+       [(<= lado 5)  (desenha-triangulo lado cor)]
+       ;; senão
+       ;;      desenha um triângulo de sierpinksi com a metade do tamanho do lado
+       ;;      acima de dois outros triângulos de sierpinksi com a metade do tamanho do lado
+       [else (above (sierpinski-sem-local (/ lado 2) cor)
+                      (beside (sierpinski-sem-local (/ lado 2) cor) (sierpinski-sem-local (/ lado 2) cor)))]))
+
+(sierpinski-sem-local 50 "red")
+
+;;===============================================================
+;; 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+;;===============================================================
+;; tapete-sierpinski: Número String -> Imagem
+;; Obj: Dados o tamanho do lado e uma cor, desenha um tapete de Sierpinski
+;; desta cor cujo lado do quadrado externo é o lado passado como argumento. 
+;; Exemplos:
+;;        (tapete-sierpinski 50 "red") = .
+(define (tapete-sierpinski lado cor);; Dados um lado e uma cor 
+    (cond
+      ;; se o lado for muito pequeno, desenhar um quadrado da cor dada com lado dado
+      [(<= lado 5) (square lado "solid" cor)]
+      ;; senão
+      [else
+       (local ;; definir nomes locais:
+                ;; seja NOVO-LADO o lado dos novos tapetes que serão desenhados, definido por lado/3:
+                ((define NOVO-LADO (/ lado 3))
+                ;; seja T um tapete de sierpinski com o lado NOVO-LADO:
+                (define T (tapete-sierpinski NOVO-LADO cor))
+                ;; seja TB um quadrado com o lado NOVO-LADO todo branco:
+                (define TB (square NOVO-LADO "solid" "white")))
+         ;; montar uma imagem com as seguinte linhas, uma acima da outra
+         (above
+                ;; três tapetes de sierpinski com NOVO-LADO, um ao lado do outro
+                (beside T T T)
+                ;;  um quadrado branco com NOVO-LADO no meio de dois tapetes de sierpinski com NOVO-LADO 
+                (beside T TB T)
+                ;;  três tapetes de sierpinski com NOVO-LADO, um ao lado do outro
+                (beside T T T)))]))
+
+(tapete-sierpinski 50 "red")
+
+;; Argumentação de terminação:
+;; Este programa sempre termina porque: a partir do momento que o lado alcançar um número abaixo de 5, desenha o último quadrado e finaliza
+;; (a) Existe um caso base (sem recursão) que é quando o lado dividido alcança um número menor que 5
+;; (b) Cada chamada recursiva é realizada tendo como argumento o lado dividido do quadrado e a cor escolhida inicialmente
+;; (c) As funções <=, above, beside e cond terminam, pois são pré-definidas da linguagem.
+;;     A função desenha-quadrado termina, pois somente usa funções pré-definidas e não tem laços.
+
+
+;;===============================================================
+;; 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 
+;;===============================================================
+
+
+;; Chamadas da função árvore (pele menos 3, colocadas lado a lado):
+;(beside (árvore ...)
+;        (árvore ...)
+;        (árvore ...))
+
+
+;; ==============================================================
+;; 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 
+;; ==============================================================
+
+
+;; Chamadas da função desenha-tapete-sierpinski (pele menos 3, colocadas lado a lado):
+
+;; Chamadas da função desenha-sierpinski (pele menos 3, colocadas lado a lado):
+
+;; Chamadas da função desenha-árvore (pele menos 3, colocadas lado a lado):
+
+;; ==============================================================
+;; 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 
+;; ==============================================================
+;; desenha-figuras: (Figura --> Image) Figura --> Cena  
+;; Obj: Dada uma função que gera a imagem de uma figura, uma figura, gerar uma cena
+;; com várias imagens desta figura.
+;; Exemplos:
+;;     ...
+
+;(define (desenha-figuras fun f);; Dadas uma função de desenho da figura e uma figura
+;  (cond
+    ;; se a figura ...., desenha uma cena vazia.
+;    [... CENA-VAZIA]
+    ;; senão monta uma cena com 
+;    [else (place-image
+;               ... ;; o desenho da figura f na
+;               ... ;; coordenada x da figura e
+;               ... ;; coordenada y da figura em
+               ;; uma cena contendo os desenhos das figuras a partir da figura modificada
+               ;; da seguinte forma ...
+;               (desenha-figuras fun (make-figura
+;                                          ...
+;                                          ...
+;                                          ...
+;                                          ...)))]) )
+
+;; Terminação: Assumindo que a função fun (argumento da função) termina,
+;;  este programa termina porque:
+;; (a) ...
+;; (b) ...
+;; (c) ...
+
+;;===============================================================
+;; 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5
+;;===============================================================
+
+;; (a) Critérios de terminação: funções do tipo Figura -> Booleano
+
+;; (b) Funções de modificação de figuras, tipo Figura -> Figura
+
+;; (c) Função desenha-figuras-gen
+;; desenha-figuras-gen: .... --> Cena
+
+
+;; (d) Argumentação sobre a terminação das chamadas:  
+
+
