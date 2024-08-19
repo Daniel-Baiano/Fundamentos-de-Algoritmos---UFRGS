@@ -211,11 +211,83 @@
 ;; ==============================================================
 
 
-;; Chamadas da função desenha-tapete-sierpinski (pele menos 3, colocadas lado a lado):
+;; Definição de constantes do tipo Figura:
+(define FIGURA_1 (make-figura 550 200 45 1))
+(define FIGURA_2 (make-figura 250 300 39 2))
+(define FIGURA_3 (make-figura 300 100 60 3))
+(define FIGURA_4 (make-figura 300 100 80 5))
+
+
+
+;; desenha-tapete-sierpinski: : Figura -> Imagem
+;; Objetivo: Dado um tipo figura, devolve uma imagem, que é o desenha-tapete-sierpinski.
+;; Exemplos:
+;; (desenha-tapete-spierpinski FIGURA_1) -> 
+;; (desenha-tapete-spierpinski FIGURA_2) -> 
+
+
+;; Corpo
+(define (desenha-tapete-sierpinski figura) ;;dada um tipo figura
+  ;; desenha tapete-sierpinski de acordo com a altura e a cor da figura
+  (tapete-sierpinski (figura-altura figura) (gera-cor(figura-cor figura))))
+
+
+
+;; Chamadas da função desenha-tapete-sierpinski, colocadas lado a lado:
+(beside
+(desenha-tapete-sierpinski FIGURA_2)
+(desenha-tapete-sierpinski FIGURA_3)
+(desenha-tapete-sierpinski FIGURA_1)
+(desenha-tapete-sierpinski FIGURA_4))
+
+
+
+
+
+;; desenha-sierpinski: : Figura -> Imagem
+;; Objetivo: Dado um tipo figura, devolve uma imagem, que é o triângulo de sierpinski.
+;; Exemplos:
+;; (desenha-spierpinski FIGURA_1) ->.
+;; (desenha-spierpinski FIGURA_2) -> .
+
+
+;; Corpo
+(define (desenha-sierpinski figura) ;;dada um tipo figura
+  ;; desenha sierpinski de acordo com a altura e a cor da figura
+  (sierpinski (figura-altura figura) (gera-cor(figura-cor figura))))
+
 
 ;; Chamadas da função desenha-sierpinski (pele menos 3, colocadas lado a lado):
+(beside
+(desenha-sierpinski FIGURA_2)
+(desenha-sierpinski FIGURA_3)
+(desenha-sierpinski FIGURA_1)
+(desenha-sierpinski FIGURA_4))
+
+
+
 
 ;; Chamadas da função desenha-árvore (pele menos 3, colocadas lado a lado):
+
+;; desenha-árvore: Figura -> Imagem
+;; Objetivo: Dado um tipo figura, devolve uma imagem, que é uma árvore.
+;; Exemplos:
+;; (desenha-árvore FIGURA_1) ->.
+;; (desenha-árvore FIGURA_2) -> .
+
+
+;; Corpo
+(define (desenha-árvore figura) ;;dada um tipo figura
+  ;; desenha tapete-sierpinski de acordo com a altura e a cor da figura
+  (árvore (figura-altura figura) (gera-cor(figura-cor figura))))
+
+
+
+;; Chamadas da função desenha-árvore, colocadas lado a lado:
+(beside
+(desenha-árvore FIGURA_2)
+(desenha-árvore FIGURA_3)
+(desenha-árvore FIGURA_1))
 
 ;; ==============================================================
 ;; 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 
