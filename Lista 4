@@ -296,30 +296,38 @@
 ;; Obj: Dada uma função que gera a imagem de uma figura, uma figura, gerar uma cena
 ;; com várias imagens desta figura.
 ;; Exemplos:
-;;     ...
+;;    (desenha-figuras desenha-árvore FIGURA_2)->
+;;    (desenha-figuras desenha-sierpinski FIGURA_2)->
 
-;(define (desenha-figuras fun f);; Dadas uma função de desenho da figura e uma figura
-;  (cond
-    ;; se a figura ...., desenha uma cena vazia.
-;    [... CENA-VAZIA]
+(define (desenha-figuras fun f);; Dadas uma função de desenho da figura e uma figura
+  (cond
+    ;; se a figura for menor ou igual a 8, desenha uma cena vazia.
+    [( <= (figura-altura f) 5) CENA-VAZIA]
     ;; senão monta uma cena com 
-;    [else (place-image
-;               ... ;; o desenho da figura f na
-;               ... ;; coordenada x da figura e
-;               ... ;; coordenada y da figura em
+    [else (place-image (fun f) ;; o desenho da figura f na 
+                       (figura-coord-x f)  ;; coordenada x da figura em
+                       (figura-coord-y f)  ;; coordenada y da figura em
                ;; uma cena contendo os desenhos das figuras a partir da figura modificada
-               ;; da seguinte forma ...
-;               (desenha-figuras fun (make-figura
-;                                          ...
-;                                          ...
-;                                          ...
-;                                          ...)))]) )
+               ;; da seguinte forma, construindo a figura
+               (desenha-figuras fun (make-figura
+                                        (/ (figura-coord-x f) 2)  ;; A coordenada x é divida dividida por 2.
+                                        (/ (figura-coord-y f) 2)  ;; A coordenada y é divida dividida por 2.
+                                        (/ (figura-altura f) 2)   ;; A altura é dividida por 2.
+                                        (+ (figura-cor f) 2))))])) ;; A cor é aumentada em 2.
+
+
+
+
+;; Chamados da função desenha-figuras: 
+ (desenha-figuras desenha-árvore FIGURA_4)
+ (desenha-figuras desenha-sierpinski FIGURA_2)
+ (desenha-figuras desenha-tapete-sierpinski FIGURA_3)
 
 ;; Terminação: Assumindo que a função fun (argumento da função) termina,
 ;;  este programa termina porque:
-;; (a) ...
-;; (b) ...
-;; (c) ...
+;; (a)   Existe um caso base (sem recursão) que é quando o lado é menor ou igual a 5.
+;; (b) A função desenha-figuras termina porque a altura da figura é dividida por 2 a cada recursão, levando a uma figura com altura menor ou igual a 5.
+;; (c) A função desenha-figuras só termina se a função fun também terminar, como as demais as funções (figura-coord-x, figura-coord-y, figura-altura, figura-cor)
 
 ;;===============================================================
 ;; 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5
