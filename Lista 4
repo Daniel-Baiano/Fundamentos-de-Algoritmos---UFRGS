@@ -199,12 +199,44 @@
 ;; 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 
 ;;===============================================================
 
+;;FUNÇÃO AUXILIAR
+;;desenha-galho-ponta: Número String -> Imagem
+;;Objetivo: Dada um número (altura) e uma string (cor) devolve a imagem de um galho com a altura e um círculo
+;; na ponta com a cor  indicada
+;;Exemplos:
+;;        (desenha-galho-ponta 20 "navy") 
+;;        (desenha-galho-ponta 40 "green") 
+(define (desenha-galho-ponta altura cor)
+  (overlay/align/offset "center" "top"
+                        (circle 3 "solid" cor)
+                        0 0
+                        (line 0 altura (pen "brown" 4 "solid" "round" "miter"))))
 
+
+;;arvore: Numero String -> Imagem
+;;Objetivo: Dada uma altura (numero) e uma cor (string) devolve a imagem de uma árvore
+;;Exemplos:
+;;         (árvore 320 "red") =
+;;         (árvore 80 "red") 
+
+(define (árvore altura cor)
+  (cond
+    ;se a altura é menor ou igual a 20, apenas desenha um galho
+    [(<= altura 20) (desenha-galho-ponta altura cor)]
+    ;senão, desenha um galho para a esquerda e um galho para a direita, formando uma arvore
+    [else
+     (overlay/align/offset "center" "bottom"
+                           (rotate -45 (árvore (/ altura 2) cor)) 
+                           (/ altura -2.4)
+                           (* altura 0.33)
+                           (overlay/align/offset "right" "bottom"
+                                                 (rotate 45 (árvore (/ altura 2) cor))
+                                                 3 (* altura 0.67)
+                                                 (desenha-galho-ponta altura cor)))]))
 ;; Chamadas da função árvore (pele menos 3, colocadas lado a lado):
-;(beside (árvore ...)
-;        (árvore ...)
-;        (árvore ...))
-
+(beside (árvore 320 "green")
+        (árvore 160 "blue")
+        (árvore 80 "pink"))
 
 ;; ==============================================================
 ;; 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 
@@ -342,5 +374,4 @@
 
 
 ;; (d) Argumentação sobre a terminação das chamadas:  
-
 
