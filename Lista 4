@@ -365,13 +365,86 @@
 ;; 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5
 ;;===============================================================
 
+
+;;================================================================
+;; 6 6 6 6 6 6 6 6 6 6  6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6
+;;================================================================
 ;; (a) Critérios de terminação: funções do tipo Figura -> Booleano
+;;termina-altura: figura -> boolean
+;;obj: comparar altura da figura 
+(define (termina-altura figura)
+  (<= (figura-altura figura) 5))
+;;termina-coord-x: figura -> boolean
+;;obj: comparar coordenada x da figura
+(define (termina-coord-x figura)
+  (<= (figura-coord-x figura) 0))
+;;termina-cor: figura -> boolean
+;;obj: comparar cor da figura
+(define (termina-cor figura)
+  ( >=(figura-cor figura) 4))
 
 ;; (b) Funções de modificação de figuras, tipo Figura -> Figura
+;;modifica-altura: figura-> figura
+;;objetivo: dada um figura modifica sua altura, divindo por 2
+;;ex:
+;;;;;; (modifica-altura(make-figura 100 100 50 6))->(make-figura 100 100 25 6)
+;;;;; (modifica-altura(make-figura 150 150 100 10)-> (make-figura 150 150 50 10)
+(define (modifica-altura figura)
+  (make-figura (figura-coord-x figura)
+               (figura-coord-y figura)
+               (/ (figura-altura figura) 2)
+               (figura-cor figura)))
+(check-expect (modifica-altura (make-figura 100 100 150 6))(make-figura 100 100 75 6))
+(check-expect (modifica-altura (make-figura 100 100 500 10))(make-figura 100 100 250 10))
+;;modifica-coord-x:figura->figura
+;;obj: dada uma figura modifica sua coord x decrementando em 50
+;;;;;; modifica-coord-x(make-figura 100 100 50 6)->(make-figura 50 100 50 6)
+;;;;; modifica-coord-x(make-figura 150 150 100 10)-> (make-figura 100 150 100 10)
+(define (modifica-coord-x figura)
+  (make-figura (-(figura-coord-x figura) 50)
+               (figura-coord-y figura)
+               (figura-altura figura)
+               (figura-cor figura)))
+(check-expect (modifica-coord-x (make-figura 100 100 150 6))(make-figura 50 100 150 6))
+(check-expect (modifica-coord-x (make-figura 150 100 500 10))(make-figura 100 100 500 10))
+;;modifica-cor:figura->figura
+;;obj: dada uma figura altera sua cor
+;;;;;; modifica-cor(make-figura 100 100 50 6)->(make-figura 100 100 50 ?)
+;;;;; modifica-cor(make-figura 150 150 100 10)-> (make-figura 150 150 100 ?)
+(define (modifica-cor figura)
+  (make-figura (figura-coord-x figura)
+               (figura-coord-y figura)
+               (figura-altura figura)
+               (random 5)))
+
 
 ;; (c) Função desenha-figuras-gen
 ;; desenha-figuras-gen: .... --> Cena
+(define (desenha-figuras-gen fun-modifica fun-termina fun-desenha figura)
+  (cond
+    [(fun-termina figura) CENA-VAZIA]
+    [else (place-image (fun-desenha figura)
+                       (figura-coord-x figura)
+                       (figura-coord-y figura)
+                       (desenha-figuras-gen fun-modifica fun-termina fun-desenha (fun-modifica figura)))]))
 
-
-;; (d) Argumentação sobre a terminação das chamadas:  
-
+;; (d) Argumentação sobre a terminação das chamadas:
+"chamada função desenha-figuras-gen"
+(desenha-figuras-gen modifica-altura termina-altura desenha-árvore FIGURA_4)
+;;essa chamada termina pois a função desenha-figuras-gen termina: existe um caso base sem recursão
+;; a função modifica-altura também termina (faz um figura, não há recursão)
+;;a função desenha-arvore também termina, pois recebe a função árvore que tem como caso base
+;;tamanho dá arvore menor ou igual a 20 e estou usando a modifica altura para diminuir o tamanho da figura passada.
+(desenha-figuras-gen modifica-coord-x termina-coord-x desenha-sierpinski FIGURA_2)
+;;essa chamada termina pois a função desenha-figuras-gen termina: existe um caso base sem recursão
+;; a função modifica-coord-x também termina (faz um figura, não há recursão)
+;; termina a chamada pois estou reduzindo a coordernada x da imagem até chegar em zero quando para de criar a imagem
+(desenha-figuras-gen modifica-altura termina-altura desenha-tapete-sierpinski FIGURA_3)
+;A função desenha-figuras-gen termina porque existe um caso base sem recursão.
+;A função modifica-altura termina porque não há recursão.
+;A função desenha-tapete-sierpinski termina porque tem um caso base quando o lado é menor que 5,
+;e a modifica-altura diminui o tamanho da figura passada
+(desenha-figuras-gen modifica-coord-x termina-coord-x desenha-árvore FIGURA_2)
+;;essa chamada termina pois a função desenha-figuras-gen termina: existe um caso base sem recursão
+;; a função modifica-coord-x também termina (faz um figura, não há recursão)
+;; termina a chamada pois estou reduzindo a coordernada x da imagem até chegar em zero quando para de criar a imagem
